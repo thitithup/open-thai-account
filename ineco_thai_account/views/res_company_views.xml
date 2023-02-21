@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ineco_company_form" model="ir.ui.view">
+        <field name="name">view.ineco.company.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Default Thai Chart of Account" name="dhart_thai">
+                    <group>
+                        <group>
+                            <field name="cash_account_id" options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="interest_income_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="cheque_sale_account_id" options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="vat_sale_account_id" options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="vat_sale_tax_break_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="cash_income_account_id" options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="wht_purchase_account_id" options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="vat_purchase_account_id" options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="vat_purchase_tax_break_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="profit_loss_account_id" options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="fee_account_id" options="{'no_create_edit': True, 'no_open': False}"/>
+                        </group>
+                        <group>
+                            <field name="cash_discount_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="wht_sale_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="unearned_income_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="interest_expense_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="wht_purchase_personal_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="cheque_purchase_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="unearned_expense_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="get_paid_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="get_overgrown_account_id"
+                                   options="{'no_create_edit': True, 'no_open': False}"/>
+                            <field name="has_accounting_entries" groups="base.group_erp_manager"/>
+                        </group>
+                        <group string="แบบฟอร์ม">
+                            <field name="action_report_deposit_id"/>
+                        </group>
+
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

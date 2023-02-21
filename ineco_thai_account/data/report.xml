@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+
+    <data noupdate="0">
+
+
+        <!--Customer Invoices-->
+        <record model="ir.actions.report" id="ineco_report_iv01">
+            <field name="jasper_report_path">/ineco_15/account/form/invioce</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ai.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">account.move</field>
+            <field name="name">ใบกำกับภาษี INECO</field>
+            <field name="print_report_name">form_invioce_tax</field>
+            <field name="report_name">account.move.form_invioce_tax</field>
+        </record>
+
+        <!--form_add_debt-->
+        <record model="ir.actions.report" id="ineco_report_form_add_debt">
+            <field name="jasper_report_path">/ineco_15/account/form/form_add_debt</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ai.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">account.move</field>
+            <field name="name">เพิ่มหนี้ (ลูกหนี้)</field>
+            <field name="print_report_name">form_add_debt</field>
+            <field name="report_name">account.move.form_add_debt</field>
+        </record>
+
+        <!--form_credit_note-->
+        <record model="ir.actions.report" id="ineco_report_form_credit_note">
+            <field name="jasper_report_path">/ineco_15/account/form/form_credit_note</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ai.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">account.move</field>
+            <field name="name">ลดหนี้ (ลูกหนี้)</field>
+            <field name="print_report_name">form_credit_note</field>
+            <field name="report_name">account.move.form_credit_note</field>
+        </record>
+
+        <!--                                &lt;!&ndash;form_credit_note&ndash;&gt;-->
+        <!--        <record model="ir.actions.report" id="ineco_report_form_credit_note">-->
+        <!--            <field name="jasper_report_path">/ineco_15/account/form/form_credit_note</field>-->
+        <!--            <field name="report_type">ineco</field>-->
+        <!--            <field name="parameter_name">IDS</field>-->
+        <!--            <field name="criteria_field">ai.id</field>-->
+        <!--            <field name="jasper_username">jasperadmin</field>-->
+        <!--            <field name="jasper_password">jasperadmin</field>-->
+        <!--            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>-->
+        <!--            <field name="model">account.move</field>-->
+        <!--            <field name="name">ลดหนี้ (ลูกหนี้)</field>-->
+        <!--            <field name="print_report_name">form_credit_note</field>-->
+        <!--            <field name="report_name">account.move.form_credit_note</field>-->
+        <!--        </record>-->
+
+        <!--Vendor Bills-->
+        <record model="ir.actions.report" id="ineco_report_vb01">
+            <field name="jasper_report_path">/ineco_15/account/form/journal_purchases</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">am.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">account.move</field>
+            <field name="name">ใบสำคัญซื้อ</field>
+            <field name="print_report_name">form_purchase_vender</field>
+            <field name="report_name">account.move.form_purchase_vender</field>
+        </record>
+
+
+        <record model="ir.actions.report" id="ineco_report_vender_credit_note">
+            <field name="jasper_report_path">/ineco_15/account/form/form_credit_note_2</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ai.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">account.move</field>
+            <field name="name">ใบลดหนี้เจ้าหนี้</field>
+            <field name="print_report_name">form_vender_credit_note</field>
+            <field name="report_name">account.move.form_vender_credit_note</field>
+        </record>
+
+        <!--วางบิล-->
+        <record model="ir.actions.report" id="ineco_report_billing2_1">
+            <field name="jasper_report_path">/ineco_15/account/form/billing2_1</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ib.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.billing</field>
+            <field name="name">ใบวางบิล</field>
+            <field name="print_report_name">billing2_1</field>
+            <field name="report_name">account.move.billing2_1</field>
+        </record>
+
+        <!--ใบสำคัญรับ-->
+        <record model="ir.actions.report" id="ineco_report_form_payment_voucher">
+            <field name="jasper_report_path">/ineco_15/account/form/journal_receive_2_2_1</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">av.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.customer.payment</field>
+            <field name="name">ใบสำคัญรับเงิน</field>
+            <field name="print_report_name">form_payment_voucher</field>
+            <field name="report_name">account.move.form_payment_voucher</field>
+        </record>
+
+        <!--        รับมัดจำ-->
+        <record model="ir.actions.report" id="ineco_report_form_receive_deposit">
+            <field name="jasper_report_path">/ineco_15/account/form/journal_receive_2_2_1_1</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">av.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.customer.deposit</field>
+            <field name="name">ใบรับมัดจำ</field>
+            <field name="print_report_name">form_payment_voucher</field>
+            <field name="report_name">account.move.form_payment_voucher</field>
+        </record>
+
+
+        <!--ใบสำคัญจ่ายเงิน-->
+        <record model="ir.actions.report" id="ineco_report_form_official_payment">
+            <field name="jasper_report_path">/ineco_15/account/form/journal_receive_2_2</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">av.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.supplier.payment</field>
+            <field name="name">ใบสำคัญจ่ายเงิน</field>
+            <field name="print_report_name">official_payment</field>
+            <field name="report_name">account.move.form_official_payment</field>
+        </record>
+
+
+        <!--ineco.cheque-->
+
+        <record model="ir.actions.report" id="ineco_report_form_cheque_tmb">
+            <field name="jasper_report_path">/ineco_15/account/form/cheque_2/cheque_tmb</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ic.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.cheque</field>
+            <field name="name">TMB</field>
+            <field name="print_report_name">cheque_tmb</field>
+            <field name="report_name">account.move.form_cheque_tmb</field>
+        </record>
+
+        <record model="ir.actions.report" id="ineco_report_form_cheque_bangkok">
+            <field name="jasper_report_path">/ineco_15/account/form/cheque_2/cheque_bangkok</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ic.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.cheque</field>
+            <field name="name">กรุงเทพ</field>
+            <field name="print_report_name">cheque_bangkok</field>
+            <field name="report_name">account.move.form_cheque_bangkok</field>
+        </record>
+
+
+        <!--        <record model="ir.actions.report" id="ineco_report_form_cheque_bangkok">-->
+        <!--            <field name="jasper_report_path">/ineco_15/account/form/cheque_2/cheque_bangkok</field>-->
+        <!--            <field name="report_type">ineco</field>-->
+        <!--            <field name="parameter_name">IDS</field>-->
+        <!--            <field name="criteria_field">ic.id</field>-->
+        <!--            <field name="jasper_username">jasperadmin</field>-->
+        <!--            <field name="jasper_password">jasperadmin</field>-->
+        <!--            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>-->
+        <!--            <field name="model">ineco.cheque</field>-->
+        <!--            <field name="name">กรุงเทพ</field>-->
+        <!--            <field name="print_report_name">cheque_bangkok</field>-->
+        <!--            <field name="report_name">account.move.form_cheque_bangkok</field>-->
+        <!--        </record>-->
+
+        <record model="ir.actions.report" id="ineco_report_form_cheque_krungsri">
+            <field name="jasper_report_path">/ineco_15/account/form/cheque_2/cheque_krungsri</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ic.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.cheque</field>
+            <field name="name">กรุงศรี</field>
+            <field name="print_report_name">cheque_krungsri</field>
+            <field name="report_name">account.move.form_cheque_krungsri</field>
+        </record>
+
+        <record model="ir.actions.report" id="ineco_report_form_cheque_uob">
+            <field name="jasper_report_path">/ineco_15/account/form/cheque_2/cheque_uob</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">ic.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.cheque</field>
+            <field name="name">UOB</field>
+            <field name="print_report_name">cheque_uob</field>
+            <field name="report_name">account.move.form_cheque_uob</field>
+        </record>
+
+
+        <!--ineco.wht-->
+
+        <record model="ir.actions.report" id="ineco_report_form_wht">
+            <field name="jasper_report_path">/ineco_15/account/form/wht</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">iw.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.wht</field>
+            <field name="name">หัก ณ ที่จ่าย</field>
+            <field name="print_report_name">form_wht</field>
+            <field name="report_name">account.move.form_wht</field>
+        </record>
+
+        <!--ภงด3 53-->
+
+        <record model="ir.actions.report" id="ineco_report_form_report_with_holding_tax_2_1">
+            <field name="jasper_report_path">/ineco_15/account/form/pp3_53/report_with_holding_tax_2_1</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">pnd.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.wht.pnd</field>
+            <field name="name">แบบแนบ ภงด 3</field>
+            <field name="print_report_name">form_report_with_holding_tax_2_1</field>
+            <field name="report_name">account.move.form_report_with_holding_tax_2_1</field>
+        </record>
+
+        <record model="ir.actions.report" id="ineco_report_form_report_with_holding_tax_2">
+            <field name="jasper_report_path">/ineco_15/account/form/pp3_53/report_with_holding_tax_2</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">pnd.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.wht.pnd</field>
+            <field name="name">แบบแนบ ภงด 53</field>
+            <field name="print_report_name">form_report_with_holding_tax_2</field>
+            <field name="report_name">account.move.form_report_with_holding_tax_2</field>
+        </record>
+
+
+        <record model="ir.actions.report" id="ineco_report_form_report_with_pnd3_1">
+            <field name="jasper_report_path">/ineco_15/account/form/pp3_53/pnd3_1</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">pnd.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.wht.pnd</field>
+            <field name="name">แบบยื่น ภงด 53</field>
+            <field name="print_report_name">form_report_with_pnd3_1</field>
+            <field name="report_name">account.move.form_report_with_pnd3_1</field>
+        </record>
+
+        <record model="ir.actions.report" id="ineco_report_form_report_with_pnd3">
+            <field name="jasper_report_path">/ineco_15/account/form/pp3_53/pnd3</field>
+            <field name="report_type">ineco</field>
+            <field name="parameter_name">IDS</field>
+            <field name="criteria_field">pnd.id</field>
+            <field name="jasper_username">jasperadmin</field>
+            <field name="jasper_password">jasperadmin</field>
+            <field name="jasper_url">http://localhost:8080/jasperserver/rest_v2/reports</field>
+            <field name="model">ineco.wht.pnd</field>
+            <field name="name">แบบยื่น ภงด3</field>
+            <field name="print_report_name">form_report_with_pnd3</field>
+            <field name="report_name">account.move.form_report_with_pnd3</field>
+        </record>
+
+
+    </data>
+</openerp>

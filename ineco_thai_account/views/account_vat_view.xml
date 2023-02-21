@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_ineco_account_vat_tree" model="ir.ui.view">
+            <field name="name">ineco.account.vat.tree</field>
+            <field name="model">ineco.account.vat</field>
+            <field name="arch" type="xml">
+                <tree string="ภาษีมูลค่าเพิ่ม" create="false" edit="1" delete="false" editable="bottom">
+                    <field name="name" readonly="1"/>
+                    <field name="invoice_id" string="เอกสารตั้งหนี้" invisible="1"/>
+                    <field name="docdat" readonly="1"/>
+                    <field name="period_id" readonly="1"/>
+                    <field name="vatprd"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="taxid" readonly="1"/>
+                    <field name="depcod" readonly="1"/>
+                    <field name="amount_untaxed" readonly="1" sum="รวมก่อนภาษี"/>
+                    <field name="amount_tax" readonly="1" sum="รวมภาษี"/>
+                    <field name="amount_total" readonly="1" sum="รวมมูลค่า"/>
+                    <field name="late"/>
+                    <field name="remark"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_new_ineco_account_vat_tree" model="ir.ui.view">
+            <field name="name">new.ineco.account.vat.tree</field>
+            <field name="model">ineco.account.vat</field>
+            <field name="arch" type="xml">
+                <tree string="ภาษีมูลค่าเพิ่ม" delete="false" editable="bottom">
+                    <field name="name"/>
+                    <field name="invoice_id" string="เอกสารตั้งหนี้" invisible="1"/>
+                    <field name="docdat"/>
+                    <field name="period_id"/>
+                    <field name="vatprd"/>
+                    <field name="partner_id" domain="[('customer','=',True)]"/>
+                    <field name="taxid" />
+                    <field name="depcod" />
+                    <field name="amount_untaxed" sum="รวมก่อนภาษี"/>
+                    <field name="amount_tax" sum="รวมภาษี"/>
+                    <field name="amount_total" sum="รวมมูลค่า"/>
+                    <field name="late"/>
+                    <field name="remark"/>
+                    <field name="move_line_id" invisible="1" />
+                    <field name="invoice_id" invisible="1" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_ineco_account_vat_search" model="ir.ui.view">
+            <field name="name">ineco.account.vat.search</field>
+            <field name="model">ineco.account.vat</field>
+            <field name="arch" type="xml">
+                <search string="ภาษีมูลค่าเพิ่ม">
+                    <field name="partner_id"/>
+                    <field name="name"/>
+                    <field name="invoice_id" string="เอกสารตั้งหนี้"/>
+                    <filter string="ระบุวันยื่นแล้ว" name="ready" domain="[('vatprd','!=', False)]"/>
+                    <filter string="ยังไม่ระบุวันยื่น" name="false_vat" domain="[('vatprd','=', False)]"/>
+                    <filter string="ยื่นภาษีล่าช้า" name="vat_late" domain="[('late','!=', False)]"/>
+                    <group expand='0' string='Group by...'>
+                        <filter string="เดือน" name="group_date" context="{'group_by':'docdat'}"/>
+                        <filter string="งวดบัญชี" name="group_period" context="{'group_by':'period_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_view_ineco_account_vat" model="ir.actions.act_window">
+            <field name="name">ภาษีมูลค่าเพิ่ม</field>
+            <field name="res_model">ineco.account.vat</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_ineco_account_vat_tree"/>
+            <field name="context">{}</field>
+            <field name="domain"></field>
+        </record>
+
+        <record id="action_view_ineco_account_vat_sale" model="ir.actions.act_window">
+            <field name="name">ภาษีขาย</field>
+            <field name="res_model">ineco.account.vat</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_ineco_account_vat_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[('tax_sale_ok', '=', True)]</field>
+        </record>
+
+        <record id="action_view_ineco_account_vat_purchase" model="ir.actions.act_window">
+            <field name="name">ภาษีซื้อ</field>
+            <field name="res_model">ineco.account.vat</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_ineco_account_vat_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[('tax_purchase_ok', '=', True)]</field>
+        </record>
+
+        <record id="action_view_ineco_account_vat_purchase_wait" model="ir.actions.act_window">
+            <field name="name">ภาษีซื้อรอนำส่ง</field>
+            <field name="res_model">ineco.account.vat</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_ineco_account_vat_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[('tax_purchase_wait_ok', '=', True)]</field>
+        </record>
+
+        <menuitem name="ภาษีมูลค่าเพิ่ม" parent="menu_ineco_account_tax"
+                  id="menu_ineco_account_vat" sequence="15"/>
+
+        <menuitem action="action_view_ineco_account_vat_sale"
+                  id="menu_ineco_account_vat_sale"
+                  parent="menu_ineco_account_vat" sequence="10"/>
+        <menuitem action="action_view_ineco_account_vat_purchase"
+                  id="menu_ineco_account_vat_purchase"
+                  parent="menu_ineco_account_vat" sequence="20"/>
+        <menuitem action="action_view_ineco_account_vat_purchase_wait"
+                  id="menu_ineco_account_vat_purchase_wait"
+                  parent="menu_ineco_account_vat" sequence="30"/>
+    </data>
+</odoo>

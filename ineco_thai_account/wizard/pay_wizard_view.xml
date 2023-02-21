@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_pay_wizard" model="ir.ui.view">
+            <field name="name">view.pay.wizard</field>
+            <field name="model">pay.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create PAY" version="7.0">
+                    <group>
+                        <field name="is_customer" invisible="1"/>
+                        <field name="is_sup" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="customer_id" options="{'no_create': True}"/>
+
+                        <group>
+                            <field name="date"/>
+                            <field name="date_due"/>
+
+                            <field name="journal_id"
+                                   domain="[('type','=','receive'),('is_deposit','!=',True),('company_id','=',company_id)]"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <newline/>
+                        <field name="item_ids" nolabel="1" colspan="2">
+                            <tree string="Details" create="false" editable="bottom">
+                                <field name="name" readonly="0" options="{'no_create': True}"/>
+                                <field name="date_invoice" readonly="1"/>
+                                <field name="amount_total" readonly="1"/>
+                                <field name="amount_residual" readonly="1"/>
+                                <field name="amount_receipt"/>
+                            </tree>
+                        </field>
+
+                    </group>
+                    <footer>
+                        <button name="action_create_cus_pay" string="สร้างรับชำระ" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_view_pay_wizard" model="ir.actions.act_window">
+            <field name="name">สร้างรับชำระ</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pay.wizard</field>
+            <field name="context">{'default_is_customer': True}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <!--        จ่าย-->
+
+        <record id="view_pay_supplier_wizard" model="ir.ui.view">
+            <field name="name">view.pay.wizard</field>
+            <field name="model">pay.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create PAY" version="7.0">
+                    <group>
+                        <field name="is_customer" invisible="1"/>
+                        <field name="is_sup" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="customer_id"
+                               string="ผู้จำหน่าย"
+                               options="{'no_create': True}"/>
+
+                        <group>
+                            <field name="date"/>
+                            <field name="date_due" string="วันที่จ่าย"/>
+
+                            <field name="journal_id"
+                                   domain="[('type','=','pay'),('is_deposit','!=',True),
+                                                                       ('company_id','=',company_id)]"
+                                   options="{'no_create': True}"
+                            />
+                        </group>
+                        <newline/>
+                        <field name="item_ids" nolabel="1" colspan="2">
+                            <tree string="Details" create="false" editable="bottom">
+                                <field name="name" readonly="0" options="{'no_create': True}"/>
+                                <!--                                <field name="date_invoice" readonly="1" />-->
+                                <!--                                <field name="amount_total" readonly="1" />-->
+                                <!--                                <field name="amount_residual" readonly="1"/>-->
+                                <field name="amount_receipt"/>
+                            </tree>
+                        </field>
+
+                    </group>
+                    <footer>
+                        <button name="action_create_supplier_pay" string="สร้างจ่ายชำระ" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_view_pay_supplier_wizard" model="ir.actions.act_window">
+            <field name="name">สร้างจ่ายชำระ</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pay.wizard</field>
+            <field name="context">{'default_is_sup': True}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="action_view_pay_supplier_wizard_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_pay_supplier_wizard"/>
+            <field name="act_window_id" ref="action_view_pay_supplier_wizard"/>
+        </record>
+
+
+    </data>
+</openerp>
+

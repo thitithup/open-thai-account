@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ineco_res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">ineco.res.config.settings.view.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='analytic']" position="after">
+                    <h2>Default Thai Chart of Account</h2>
+                    <div class="row mt16 o_settings_container" id="ineco_thai_account">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="cash_account_id" string="เงินสด" class="col-lg-4"/>
+                                        <field name="cash_account_id" options="{'no_create_edit': True, 'no_open': True}" />
+                                    </div>
+                                    <div class="row">
+                                        <label for="interest_income_account_id" string="ดอกเบี้ยรับ" class="col-lg-4"/>
+                                        <field name="interest_income_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="cheque_sale_account_id" string="เช็ครับล่วงหน้า" class="col-lg-4"/>
+                                        <field name="cheque_sale_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="vat_sale_account_id" string="ภาษีขาย" class="col-lg-4"/>
+                                        <field name="vat_sale_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="vat_sale_tax_break_account_id" string="ภาษีขายพัก" class="col-lg-4"/>
+                                        <field name="vat_sale_tax_break_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="cash_income_account_id" string="ส่วนลดรับ" class="col-lg-4"/>
+                                        <field name="cash_income_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="wht_purchase_account_id" string="ภาษีหัก ณ ที่จ่าย" class="col-lg-4"/>
+                                        <field name="wht_purchase_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="vat_purchase_account_id" string="ภาษีซื้อ" class="col-lg-4"/>
+                                        <field name="vat_purchase_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="vat_purchase_tax_break_account_id" string="ภาษีซื้อพัก" class="col-lg-4"/>
+                                        <field name="vat_purchase_tax_break_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="profit_loss_account_id" string="กำไรขาดทุนอัตราแลกเปลี่ยน" class="col-lg-4"/>
+                                        <field name="profit_loss_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="fee_account_id" string="ค่าธรรมเนียม" class="col-lg-4"/>
+                                        <field name="fee_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="cash_discount_account_id" string="ส่วนลดจ่าย" class="col-lg-4"/>
+                                        <field name="cash_discount_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="wht_sale_account_id" string="ภาษีถูกหัก ณ ที่จ่าย" class="col-lg-4"/>
+                                        <field name="wht_sale_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="unearned_income_account_id" string="รายได้รับล่วงหน้า" class="col-lg-4"/>
+                                        <field name="unearned_income_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="interest_expense_account_id" string="ดอกเบี้ยจ่าย" class="col-lg-4"/>
+                                        <field name="interest_expense_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="wht_purchase_personal_account_id" string="ภาษีหัก ณ ที่จ่าย (บุคคล)" class="col-lg-4"/>
+                                        <field name="wht_purchase_personal_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="cheque_purchase_account_id" string="เช็คจ่ายล่วงหน้า" class="col-lg-4"/>
+                                        <field name="cheque_purchase_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="unearned_expense_account_id" string="ค่าใช้จ่ายล่วงหน้า" class="col-lg-4"/>
+                                        <field name="unearned_expense_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="get_paid_account_id" string="หักรับเงินขาด" class="col-lg-4"/>
+                                        <field name="get_paid_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="get_overgrown_account_id" string="บวกรับเงินเกิน" class="col-lg-4"/>
+                                        <field name="get_overgrown_account_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <!--<record id="action_ineco_account_config" model="ir.actions.act_window">
+            <field name="name">ตั้งค่าผังบัญชี</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="ineco_res_config_settings_view_form"/>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'ineco_thai_v11'}</field>
+        </record>
+
+        <menuitem id="menu_thai_account_config" name="ตั้งค่าผังบัญชี" parent="menu_ineco_account_main"
+                  sequence="0" action="action_ineco_account_config"/>-->
+
+    </data>
+</odoo>

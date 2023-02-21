@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <menuitem name="ลงบัญชีรายวัน" parent="account.menu_finance"
+                  id="menu_ineco_account_entry" sequence="10"/>
+
+        <record id="view_ineco_account_move_tree" model="ir.ui.view">
+            <field name="name">account_ineco.move.tree</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="Account Entries">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total" sum="Total Amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+<!--        <button name="action_show_details" type="object" icon="fa-list" width="0.1" attrs="{'invisible': [('show_details_visible', '=', False)]}" options="{&quot;warn&quot;: true}"/>-->
+<!--                                    -->
+
+
+
+        <record id="action_ineco_move_purchase" model="ir.actions.act_window">
+            <field name="name">สมุดรายวันซื้อ</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('journal_id.type', '=', 'purchase')]</field>
+            <field name="context">{'default_move_type_thai': 'purchase', 'search_default_misc_filter':1, 'view_no_maturity': True}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a journal entry.
+                </p>
+                <p>
+                    A journal entry consists of several journal items, each of
+                    which is either a debit or a credit transaction.
+                </p>
+                <p>
+                    Odoo automatically creates one journal entry per accounting
+                    document: invoice, refund, supplier payment, bank statements,
+                    etc. So, you should record journal entries manually only/mainly
+                    for miscellaneous operations.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_ineco_move_purchase_tree">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_ineco_account_move_tree"/>
+            <field name="act_window_id" ref="action_ineco_move_purchase"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_ineco_move_purchase_form">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account.view_move_form"/>
+            <field name="act_window_id" ref="action_ineco_move_purchase"/>
+        </record>
+
+        <menuitem name="สมุดรายวันซื้อ" parent="menu_ineco_account_entry"
+                  id="menu_purchase_journal_entry"
+                  action="action_ineco_move_purchase"
+                  sequence="10"/>
+
+
+    </data>
+</odoo>

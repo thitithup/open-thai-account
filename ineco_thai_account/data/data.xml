@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_ineco_billing" model="ir.sequence">
+            <field name="name">Ineco Billing</field>
+            <field name="code">ineco.billing</field>
+            <field name="prefix">BL-</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+
+    <data noupdate="1">
+        <record id="model_ineco_billing_comp_rule" model="ir.rule">
+            <field name="name">รับ/วางบิล</field>
+            <field name="model_id" ref="model_ineco_billing"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="model_ineco_cheque_comp_rule" model="ir.rule">
+            <field name="name">เช็ค</field>
+            <field name="model_id" ref="model_ineco_cheque"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+        <record id="model_ineco_customer_deposit_comp_rule" model="ir.rule">
+            <field name="name">มัดจำ</field>
+            <field name="model_id" ref="model_ineco_customer_deposit"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="model_ineco_customer_payment_comp_rule" model="ir.rule">
+            <field name="name">รับชำระ</field>
+            <field name="model_id" ref="model_ineco_customer_payment"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+        <record id="model_ineco_supplier_payment_comp_rule" model="ir.rule">
+            <field name="name">จ่ายชำระ</field>
+            <field name="model_id" ref="model_ineco_supplier_payment"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="model_ineco_account_vat_comp_rule" model="ir.rule">
+            <field name="name">vat</field>
+            <field name="model_id" ref="model_ineco_account_vat"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+        <record id="model_ineco_wht_pnd_comp_rule" model="ir.rule">
+            <field name="name">นำส่งภาษี</field>
+            <field name="model_id" ref="model_ineco_wht_pnd"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+        <record id="model_ineco_wht_comp_rule" model="ir.rule">
+            <field name="name">หัก ณ ที่จ่าย</field>
+            <field name="model_id" ref="model_ineco_wht"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+
+        <record id="model_ineco_petty_cash_invoice_rule" model="ir.rule">
+            <field name="name">ค่าใช้จ่าย</field>
+            <field name="model_id" ref="model_ineco_petty_cash_invoice"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+        <record id="model_ineco_petty_rule" model="ir.rule">
+            <field name="name">เงินสดย่อยในมือ</field>
+            <field name="model_id" ref="model_ineco_petty_cash"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+        <record id="model_ineco_pay_in_petty_cash_rule" model="ir.rule">
+            <field name="name">ineco_pay_in_petty_cash</field>
+            <field name="model_id" ref="model_ineco_pay_in_petty_cash"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+    </data>
+</odoo>

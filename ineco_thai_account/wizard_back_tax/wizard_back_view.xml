@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_wizard_back_tax" model="ir.ui.view">
+            <field name="name">view_wizard_back_tax</field>
+            <field name="model">wizard.back.tax</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create Purchase Tax" version="7.0">
+                    <group>
+                        <group>
+                            <field name="type" required="1"/>
+                            <field name="name" readonly="0"  attrs="{'invisible': [('type','=','1')]}"/>
+                            <field name="docdat" readonly="0" />
+                            <field name="partner_id" readonly="1" attrs="{'invisible': [('type','=','1')]}"/>
+                            <field name="journal_id" required='1'
+                                   options="{'no_create': True}"
+                                   domain="[('type','=','general'),('input_tax','=',True)]"/>
+                            <field name="vatprd"/>
+                            <field name="account_id" invisible="1"/>
+                            <field name="ineco_vat" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="taxid" readonly="1" attrs="{'invisible': [('type','=','1')]}"/>
+                            <field name="depcod" readonly="1" attrs="{'invisible': [('type','=','1')]}"/>
+                        </group>
+                        <group>
+                            <field name="amount_untaxed" readonly="1"/>
+                            <field name="amount_tax" invisible="1"/>
+                            <field name="amount_tax_total"/>
+                            <field name="amount_total" readonly="1"/>
+
+                        </group>
+
+                        <newline/>
+                        <field name="item_ids" nolabel="1" colspan="2">
+                            <tree string="Details" create="0" edit="0">
+                                <field name="name"/>
+                                <field name="docdat"/>
+                                <field name="partner_id"/>
+                                <field name="taxid"/>
+                                <field name="depcod"/>
+                                <field name="amount_untaxed" readonly="0"/>
+                                <field name="amount_tax" readonly="0"/>
+                                <field name="amount_total" readonly="0"/>
+                                <field name="account_id" invisible="1"/>
+                                <field name="ineco_vat" invisible="1"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <p>ห้ามแก้ไข้ข้อมูล</p>
+                                     <p>กรุณา ลบ รายการออก / เลือกรายการทำใหม่</p>
+                                </group>
+                            </form>
+                        </field>
+
+                    </group>
+                    <footer>
+                        <button name="create_po_tax" string="กลับภาษี" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="Cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+         <record id="action_wizard_back_tax_1iv" model="ir.actions.act_window">
+            <field name="name">กลับภาษีซื้อ</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.back.tax</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!-- TODO: check if we need this -->
+            <field name="binding_model_id" ref="ineco_thai_account.model_ineco_account_vat" />
+            <field name="binding_view_types">list</field>
+        </record>
+
+
+
+    </data>
+</odoo>
+

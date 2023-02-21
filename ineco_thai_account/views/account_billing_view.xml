@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_ineco_billing_tree" model="ir.ui.view">
+            <field name="name">ineco.billing.tree</field>
+            <field name="model">ineco.billing</field>
+            <field name="arch" type="xml">
+                <tree string="Billing">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="date_due"/>
+                    <field name="customer_id" string="ลูกค้า" groups="base.group_multi_company"/>
+                    <field name="amount_residual"/>
+                    <field name="amount_refund"/>
+                    <field name="amount_billing"/>
+                    <field name="company_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_ineco_billing_form" model="ir.ui.view">
+            <field name="name">ineco.billing.form</field>
+            <field name="model">ineco.billing</field>
+            <field name="arch" type="xml">
+                <form string="Billing">
+                    <header>
+
+                        <button name="action_post" type="object" states="draft" string="ยืนยัน"/>
+                        <button name="%(ineco_thai_account.action_view_pay_wizard)d" states="post" type='action'
+
+                                string="สร้างรับชำระ"/>
+
+
+                        <field name="is_locked" invisible="1"/>
+                        <button name="action_toggle_is_locked"
+                                attrs="{'invisible': ['|', ('state', 'in', ('draft','done')), ('is_locked', '=', False)]}"
+                                string="Unlock"
+                                groups="base.group_system"
+                                type="object"
+                                help="If the picking is unlocked you can edit initial demand (for a draft picking) or done quantities (for a done picking)."/>
+                        <button name="action_toggle_is_locked" attrs="{'invisible': [('is_locked', '=', True)]}"
+                                string="Lock"
+                                class="oe_highlight" type="object"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="done,draft,post"
+                               statusbar_colors='{"draft":"blue"}'/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+
+                                <field name="customer_id" domain="[('is_company','=',True),('customer','=',True),('company_id','=',company_id)]"
+                                       groups="base.group_multi_company" />
+                                       attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="amount_residual" readonly="1"/>
+                                <field name="amount_refund" readonly="1"/>
+                                <field name="amount_billing" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="date_due" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <!--                                <field name="change_number" groups="base.group_erp_manager"/>-->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Invoices">
+                                <group string="ใบแจ้งหนี้/ใบกำกับภาษี" colspan="4">
+                                    <field name="invoice_ids" nolabel="1" colspan="4"
+                                           groups="base.group_multi_company"
+                                           domain="[('state','=','posted'),
+                                           ('partner_id','=',customer_id),
+                                           ('billing_id','=',False),
+                                        ('amount_residual_signed','!=',0),
+                                        ('move_type','in',['out_invoice'])
+                                        ]"
+                                           attrs="{'readonly':[('state', 'in', ('post','done')),('is_locked','=',True)]}">
+                                        <tree string="Refunds">
+                                            <field name="name" string="เลขที่ใบกำกับ"/>
+                                            <field name="invoice_date" string="ลงวันที่"/>
+                                            <field name="invoice_date_due" string="วันครบกำหนด"/>
+                                            <field name="ref" string="อ้างถึง"/>
+                                            <field name="state" string="สถานะ" invisible="1"/>
+                                            <field name="amount_total_signed" sum="Total"/>
+                                            <field name="amount_tax_signed" invisible="1"/>
+                                            <field name="amount_residual_signed" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="ใบลดหนี้" colspan="4">
+                                    <field name="refund_ids" nolabel="1" colspan="4"
+                                           groups="base.group_multi_company"
+                                           domain="[('state','=','posted'),('partner_id','=',customer_id),
+                                           ('billing_id','=',False),
+                                        ('amount_residual_signed','!=',0),
+                                        ('move_type','in',['out_refund'])]"
+                                           attrs="{'readonly':[('state', 'in', ('post','done')),('is_locked','=',True)]}">
+                                        <tree string="Refunds">
+                                            <field name="name" string="เลขที่ใบกำกับ"/>
+                                            <field name="invoice_date" string="ลงวันที่"/>
+                                            <field name="invoice_date_due" string="วันครบกำหนด"/>
+                                            <field name="ref" string="อ้างถึง"/>
+                                            <field name="state" string="สถานะ" invisible="1"/>
+                                            <field name="amount_total_signed" sum="Total"/>
+                                            <field name="amount_tax_signed" invisible="1"/>
+                                            <field name="amount_residual_signed" invisible="1"/>
+
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Note">
+                                <group>
+                                    <field name="company_id" groups="base.group_multi_company" required="1"/>
+                                </group>
+                                <field name="note" nolabel="1" colspan="4"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_ineco_billing_search" model="ir.ui.view">
+            <field name="name">ineco.billing.search</field>
+            <field name="model">ineco.billing</field>
+            <field name="arch" type="xml">
+                <search string="Billing">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="date_due"/>
+                    <field name="customer_id" groups="base.group_multi_company"/>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_ineco_billing" model="ir.actions.act_window">
+            <field name="name">ใบวางบิล</field>
+            <field name="res_model">ineco.billing</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type', '=', 'ar')]</field>
+            <field name="context">{'default_type': 'ar'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a fiscal period.
+                </p>
+                <p>
+                    An accounting period typically is a month or a quarter. It
+                    usually corresponds to the periods of the tax declaration.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_ineco_billing_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_ineco_billing_tree"/>
+            <field name="act_window_id" ref="action_ineco_billing"/>
+        </record>
+
+        <record id="action_ineco_billing__form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_ineco_billing_form"/>
+            <field name="act_window_id" ref="action_ineco_billing"/>
+        </record>
+
+        <menuitem action="action_ineco_billing"
+                  id="menu_acc_billing"
+                  parent="account.menu_finance_receivables"
+                  sequence="3"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="insert_field_stock_view_picking_form_ineco_artisan_01" model="ir.ui.view">
+            <field name="name">insert.field.stock.view.picking.form.ineco.artisan.01</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group[2]/group[2]" position="after">
+                    <group string="INVOICE">
+                       <field name="create_invoice_vendor" />
+                       <field name="create_invoice_customer" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+</odoo>

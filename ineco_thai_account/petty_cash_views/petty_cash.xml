@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="ineco_petty_cash_tree" model="ir.ui.view">
+            <field name="name">ineco.petty.cash.tree</field>
+            <field name="model">ineco.petty.cash</field>
+            <field name="arch" type="xml">
+                <tree string="Sale Order Line">
+                    <field name="user_id"/>
+                    <field name="name"/>
+                    <field name="department_id"/>
+                    <field name="amount_control" string="ยอดวงเงิน"/>
+                    <field name="amount_residual" readonly="1"/>
+                    <field name="company_id"/>
+                    <field name="state"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="ineco_petty_cash_form" model="ir.ui.view">
+            <field name="name">ineco.petty.cash.form</field>
+            <field name="model">ineco.petty.cash</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="%(action_ineco_petty_cash_make_pay)d" string="เติมวงเงิน" type="action"
+                                class="oe_highlight" states="ok"/>
+                        <button name="approve" string="ยืนยัน" type="object"
+                                states="pending"
+                                groups="base.group_no_one,ineco_thai_account.group_petty_cash_manager"/>
+                        <button name="edit" string="แก้ไข" type="object"
+                                states="ok" groups="base.group_no_one,ineco_thai_account.group_petty_cash_manager"/>
+                        <field name="state" widget="statusbar" statusbar_visible="pending,ok"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_pay_in_petty" class="oe_stat_button" icon="fa-file">
+                                <field name="pay_kk_count" widget="statinfo" string="ตั้งเบิก"/>
+                                <field name="pay_in_ids" invisible="1"/>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="ระบุชื่อ" attrs="{'readonly': [('state','=', 'ok')]}"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="user_id" attrs="{'readonly': [('state','=', 'ok')]}"/>
+                                <field name="account_id" srting="ผังบัญชี" attrs="{'readonly': [('state','=', 'ok')]}"
+                                       options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="amount_control" attrs="{'readonly':[('state','=','ok')]}"/>
+                                <field name="amount_residual" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="amount_min" attrs="{'readonly': [('state','=', 'ok')]}"/>
+                                <field name="department_id" attrs="{'readonly': [('state','=', 'ok')]}"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+
+
+                        <group>
+                            <notebook>
+                                <page string="ประวัติ">
+                                    <field name="line_ids" readonly="1" colspan="4"
+                                           attrs="{'readonly': [('state','=', 'ok')]}">
+                                        <tree default_order="date_amount desc">
+                                            <field name="date_amount"/>
+                                            <field name="name" string="เอกสาร/รายละเอียด"/>
+                                            <field name="control_id" invisible="1"/>
+                                            <field name="begin_amount" invisible="1"/>
+                                            <field name="receive_amount" string="รับ"/>
+                                            <field name="pay_amount" string="จ่าย"/>
+                                            <field name="balance_amount" string="คงเหลือ"/>
+                                        </tree>
+                                        <form>
+                                            <header>
+
+                                            </header>
+                                            <sheet>
+                                                <group>
+                                                    <field name="date_amount" readonly="1"/>
+                                                    <field name="name" string="เอกสาร/รายละเอียด" />
+                                                    <field name="move_id" />
+                                                    <field name="control_id" invisible="1"/>
+
+
+                                                </group>
+                                                <group>
+                                                    <field name="begin_amount" invisible="1"/>
+                                                    <field name="receive_amount" string="รับ"/>
+                                                    <field name="pay_amount" string="จ่าย"/>
+                                                    <field name="balance_amount" string="คงเหลือ"/>
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_ineco_petty_cash" model="ir.actions.act_window">
+            <field name="name">เงินสดในมือ</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ineco.petty.cash</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+            <!--            <field name="search_view_id" ref="view_cancel_sales_order_line_filter"/>-->
+            <!--            <field name="domain">[('state','=','sale')]</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a contact in your contacts directory.
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to
+                    a customer: discussions, history of business opportunities,
+                    documents, etc.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem
+                id="menu_action_ineco_petty_cash_root"
+                sequence="5"
+                name="เงินสดย่อย"
+                parent="account.menu_finance"
+        />
+
+
+        <menuitem
+                id="menu_action_petty_cash_config"
+                sequence="10"
+                name="กำหนดวงเงิน"
+                parent="menu_action_ineco_petty_cash_root"
+                groups="group_petty_cash_manager"
+        />
+
+
+        <menuitem
+                id="menu_action_action_ineco_petty_cash"
+                sequence="0"
+                parent="menu_action_petty_cash_config"
+                action="action_ineco_petty_cash"
+        />
+
+
+    </data>
+</openerp>

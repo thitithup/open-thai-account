@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_ineco_move_entry_form" model="ir.ui.view">
+            <field name="name">view.ineco.move.entry.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@id='aml_tab']/field/tree/field[@name='partner_id']" position="attributes">
+                    <attribute name="attrs">{'column_invisible': [('parent.move_type', '!=', 'entry')],
+                                             'required': [('is_required_partner', '=', True)]}</attribute>
+                </xpath>
+
+                <!--
+                <xpath expr="//page[@id='aml_tab']/field/tree/field[@name='account_id']" position="attributes">
+                    <attribute name="domain">[('user_type_id.name', '!=', 'View')]</attribute>
+                </xpath>
+                -->
+
+                <xpath expr="//page[@id='aml_tab']/field/tree/field[@name='tax_tag_ids']" position="after">
+                    <field name="reconciled_move_id"
+                           options="{'no_create': True,'no_open': True}"
+                           domain="[('amount_residual','!=',0.0),
+                                  ('account_id','=',account_id),('move_id.state','=','posted')]"
+                           attrs="{'column_invisible':[('parent.move_type', '!=', 'entry')]}"/>
+                    <field name="tax_ok" invisible="1"/>
+                    <field name="wht_sale_ok" invisible="1"/>
+                    <field name="wht_purchase_ok" invisible="1"/>
+                    <field name="cheque_ok" invisible="1"/>
+                    <field name="is_required_partner" invisible="1"/>
+                    <button name="action_open_vat" string="VAT" type="object"
+                            attrs="{'invisible': [('tax_ok','!=',True)]}"/>
+                    <button name="action_open_wht_purchase" string="WHT" type="object"
+                            attrs="{'invisible': [('wht_purchase_ok','!=',True)]}"/>
+                    <button name="action_open_wht_sale" string="WHT" type="object"
+                            attrs="{'invisible': [('wht_sale_ok','!=',True)]}"/>
+                    <button name="action_open_cheque" string="CHQ" type="object"
+                            attrs="{'invisible': [('cheque_ok','!=',True)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_move_line_tax_ineco_tree" model="ir.ui.view">
+            <field name="name">account.move.line.tax.ineco.tree</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
+            <field name="arch" type="xml">
+
+                <field name="credit" position="after">
+                    <field name="amount_residual"/>
+                </field>
+
+            </field>
+        </record>
+
+        <!--
+        <record id="view_move_line_tax_ineco_tree_grouped" model="ir.ui.view">
+            <field name="name">account.move.line.tax.ineco.tree.grouped</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree_grouped"/>
+            <field name="arch" type="xml">
+
+                <field name="credit" position="after">
+                    <field name="amount_residual"/>
+                </field>
+
+            </field>
+        </record>
+        -->
+
+    </data>
+</odoo>
