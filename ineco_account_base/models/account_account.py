@@ -18,7 +18,7 @@ class AccountAccount(models.Model):
     wht_purchase_ok = fields.Boolean(string=u'ภาษีหัก ณ ที่จ่าย', copy=False, track_visibility=True)
     wht_sale_ok = fields.Boolean(string=u'ภาษีถูกหัก ณ ที่จ่าย', copy=False, track_visibility=True)
     wait = fields.Boolean(string=u'ภาษีซื้อรอนำส่ง', copy=False, track_visibility=True)
-
+    tax_sale_wait = fields.Boolean(string=u'ภาษีขายรอนำส่ง', copy=False, tracking=True)
 
 class AccountAccountTemplate(models.Model):
     _inherit = 'account.account.template'
