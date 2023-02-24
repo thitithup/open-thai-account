@@ -67,6 +67,8 @@ class AccountMove(models.Model):
     partner_supplier_domain = fields.Boolean(u'supplier domain', default=False)
 
     rate = fields.Float(digits=(12, 6), default=1.0, help='The rate of the currency to the currency of rate 1')
+    internal_number = fields.Char(string="Number", copy=False, tracking=True,
+        help="Unique number of the invoice, computed automatically when the invoice is created.")
     from_ip = fields.Char(string="มาจากไอพี")
     from_id = fields.Char(string="มาจากไอดี", index=True)
     temp_state = fields.Char(string="Temp State")
@@ -206,8 +208,8 @@ class AccountMove(models.Model):
         self.update({'rate': rate})
 
     def action_post(self):
-        if self.payment_reference and self.change_number:
-            self.name = self.payment_reference
+        if self.internal_number and self.change_number:
+            self.name = self.internal_number
         else:
             if self.name == '/':
                 if not self.journal_id.secure_sequence_id:

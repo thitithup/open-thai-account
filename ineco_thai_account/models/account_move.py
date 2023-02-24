@@ -10,7 +10,6 @@ from datetime import date, timedelta
 from collections import defaultdict
 
 
-
 class AccountMove(models.Model):
     _inherit = "account.move"
 
@@ -21,17 +20,16 @@ class AccountMove(models.Model):
             starting_sequence = "R" + starting_sequence
         return starting_sequence
 
-    @api.depends('state', 'move_type','company_id')
+    @api.depends('state', 'move_type', 'company_id')
     def _compute_suitable_partner_ids(self):
         for m in self:
-            if m.move_type in ['out_refund','out_invoice','out_receipt']:
-                domain = [('is_company','=',True),('customer','=',True),('company_id','=',m.company_id.id)]
-            elif m.move_type in ['out_invoice','in_invoice','in_receipt']:
-                domain = [('supplier','=',True),('is_company', '=', True),('company_id', '=', m.company_id.id)]
+            if m.move_type in ['out_refund', 'out_invoice', 'out_receipt']:
+                domain = [('is_company', '=', True), ('customer', '=', True), ('company_id', '=', m.company_id.id)]
+            elif m.move_type in ['out_invoice', 'in_invoice', 'in_receipt']:
+                domain = [('supplier', '=', True), ('is_company', '=', True), ('company_id', '=', m.company_id.id)]
             else:
-                domain = [('is_company', '=', True),('company_id', '=', m.company_id.id)]
+                domain = [('is_company', '=', True), ('company_id', '=', m.company_id.id)]
             m.suitable_partner_ids = self.env['res.partner'].search(domain)
-
 
     suitable_partner_ids = fields.Many2many('res.partner', compute='_compute_suitable_partner_ids')
     partner_id = fields.Many2one('res.partner', readonly=True, tracking=True,
@@ -45,25 +43,24 @@ class AccountMove(models.Model):
     detail = fields.Char(related='line_ids.name', string=u'รายละเอียด')
 
     billing_invoice_ids = fields.Many2many('ineco.billing',
-                                                      'billing_invoice_verder_rel',
-                                                      'invoice_id',
-                                                      'billing_id',
+                                           'billing_invoice_verder_rel',
+                                           'invoice_id',
+                                           'billing_id',
 
-                                                      string='ใบแจ้งหนี้/ใบกำกับภาษี')
+                                           string='ใบแจ้งหนี้/ใบกำกับภาษี')
     billing_refund_ids = fields.Many2many('ineco.billing',
-                                                     'billing_invoice_refund_verder_rel',
-                                                     'invoice_id',
-                                                     'billing_id',
-                                                     string='ใบลดหนี้')
+                                          'billing_invoice_refund_verder_rel',
+                                          'invoice_id',
+                                          'billing_id',
+                                          string='ใบลดหนี้')
     move_type_thai = fields.Selection(selection=[
         ('sale', 'Sale'),
         ('purchase', 'Purchase'),
         ('receive', 'Receivable'),  # New
         ('pay', 'Payable'),  # New
         ('general', 'Miscellaneous'),
-    ], string='move_type_thai', required=False, store=True, index=True, readonly=True, tracking=True, change_default=True)
-
-
+    ], string='move_type_thai', required=False, store=True, index=True, readonly=True, tracking=True,
+        change_default=True)
 
     @api.depends('company_id', 'invoice_filter_type_domain')
     def _compute_suitable_journal_ids(self):
@@ -108,7 +105,6 @@ class AccountMove(models.Model):
         iml.append((0, 0, move_data_vals))
 
         self.move_id.sudo().write({'line_ids': iml})
-
 
     def _post_validate(self):
         res = super(AccountMove, self)._post_validate()
@@ -178,7 +174,8 @@ class AccountMove(models.Model):
                 # Search new account.
                 domain = [
                     ('company_id', '=', self.company_id.id),
-                    ('internal_type', '=', 'receivable' if self.move_type in ('out_invoice', 'out_refund', 'out_receipt') else 'payable'),
+                    ('internal_type', '=',
+                     'receivable' if self.move_type in ('out_invoice', 'out_refund', 'out_receipt') else 'payable'),
                 ]
                 return self.env['account.account'].search(domain, limit=1)
 
@@ -191,13 +188,15 @@ class AccountMove(models.Model):
             :return:                        A list <to_pay_company_currency, to_pay_invoice_currency, due_date>.
             '''
             if self.invoice_payment_term_id:
-                to_compute = self.invoice_payment_term_id.compute(total_balance, date_ref=date, currency=self.currency_id)
+                to_compute = self.invoice_payment_term_id.compute(total_balance, date_ref=date,
+                                                                  currency=self.currency_id)
                 if self.currency_id == self.company_id.currency_id:
                     # Single-currency.
                     return [(b[0], b[1], b[1]) for b in to_compute]
                 else:
                     # Multi-currencies.
-                    to_compute_currency = self.invoice_payment_term_id.compute(total_amount_currency, date_ref=date, currency=self.currency_id)
+                    to_compute_currency = self.invoice_payment_term_id.compute(total_amount_currency, date_ref=date,
+                                                                               currency=self.currency_id)
                     return [(b[0], b[1], ac[1]) for b, ac in zip(to_compute, to_compute_currency)]
             else:
                 return [(fields.Date.to_string(date), total_balance, total_amount_currency)]
@@ -231,7 +230,8 @@ class AccountMove(models.Model):
                     })
                 else:
                     # Create new line.
-                    create_method = in_draft_mode and self.env['account.move.line'].new or self.env['account.move.line'].create
+                    create_method = in_draft_mode and self.env['account.move.line'].new or self.env[
+                        'account.move.line'].create
                     if balance:
                         candidate = create_method({
                             'name': self.payment_reference or '',
@@ -252,8 +252,10 @@ class AccountMove(models.Model):
                     candidate.update(candidate._get_fields_onchange_balance())
             return new_terms_lines
 
-        existing_terms_lines = self.line_ids.filtered(lambda line: line.account_id.user_type_id.type in ('receivable', 'payable'))
-        others_lines = self.line_ids.filtered(lambda line: line.account_id.user_type_id.type not in ('receivable', 'payable'))
+        existing_terms_lines = self.line_ids.filtered(
+            lambda line: line.account_id.user_type_id.type in ('receivable', 'payable'))
+        others_lines = self.line_ids.filtered(
+            lambda line: line.account_id.user_type_id.type not in ('receivable', 'payable'))
         company_currency_id = self.company_id.currency_id
         total_balance = sum(others_lines.mapped(lambda l: company_currency_id.round(l.balance)))
         total_amount_currency = sum(others_lines.mapped('amount_currency'))
@@ -274,106 +276,10 @@ class AccountMove(models.Model):
             self.payment_reference = new_terms_lines[-1].name or ''
             self.invoice_date_due = new_terms_lines[-1].date_maturity
 
-    def _post(self, soft=True):
-        if soft:
-            future_moves = self.filtered(lambda move: move.date > fields.Date.context_today(self))
-            future_moves.auto_post = True
-            for move in future_moves:
-                msg = _('This move will be posted at the accounting date: %(date)s', date=format_date(self.env, move.date))
-                move.message_post(body=msg)
-            to_post = self - future_moves
-        else:
-            to_post = self
-
-        # `user_has_group` won't be bypassed by `sudo()` since it doesn't change the user anymore.
-        if not self.env.su and not self.env.user.has_group('account.group_account_invoice'):
-            raise AccessError(_("You don't have the access rights to post an invoice."))
-        for move in to_post:
-            # if not move.line_ids.filtered(lambda line: not line.display_type):
-            #     raise UserError(_('You need to add a line before posting.'))
-            if move.auto_post and move.date > fields.Date.context_today(self):
-                date_msg = move.date.strftime(get_lang(self.env).date_format)
-                raise UserError(_("This move is configured to be auto-posted on %s", date_msg))
-
-            if not move.partner_id:
-                if move.is_sale_document():
-                    raise UserError(_("The field 'Customer' is required, please complete it to validate the Customer Invoice."))
-                elif move.is_purchase_document():
-                    raise UserError(_("The field 'Vendor' is required, please complete it to validate the Vendor Bill."))
-
-            if move.is_invoice(include_receipts=True) and float_compare(move.amount_total, 0.0, precision_rounding=move.currency_id.rounding) < 0:
-                raise UserError(_("You cannot validate an invoice with a negative total amount. You should create a credit note instead. Use the action menu to transform it into a credit note or refund."))
-
-            # Handle case when the invoice_date is not set. In that case, the invoice_date is set at today and then,
-            # lines are recomputed accordingly.
-            # /!\ 'check_move_validity' must be there since the dynamic lines will be recomputed outside the 'onchange'
-            # environment.
-            if not move.invoice_date and move.is_invoice(include_receipts=True):
-                move.invoice_date = fields.Date.context_today(self)
-                move.with_context(check_move_validity=False)._onchange_invoice_date()
-
-            # When the accounting date is prior to the tax lock date, move it automatically to the next available date.
-            # /!\ 'check_move_validity' must be there since the dynamic lines will be recomputed outside the 'onchange'
-            # environment.
-            if (move.company_id.tax_lock_date and move.date <= move.company_id.tax_lock_date) and (move.line_ids.tax_ids or move.line_ids.tax_tag_ids):
-                move.date = move.company_id.tax_lock_date + timedelta(days=1)
-                move.with_context(check_move_validity=False)._onchange_currency()
-
-        # Create the analytic lines in batch is faster as it leads to less cache invalidation.
-        to_post.mapped('line_ids').create_analytic_lines()
-        to_post.write({
-            'state': 'posted',
-            'posted_before': True,
-        })
-
-        for move in to_post:
-            move.message_subscribe([p.id for p in [move.partner_id] if p not in move.sudo().message_partner_ids])
-
-            # Compute 'ref' for 'out_invoice'.
-            if move._auto_compute_invoice_reference():
-                to_write = {
-                    'payment_reference': move._get_invoice_computed_reference(),
-                    'line_ids': []
-                }
-                for line in move.line_ids.filtered(lambda line: line.account_id.user_type_id.type in ('receivable', 'payable')):
-                    to_write['line_ids'].append((1, line.id, {'name': to_write['payment_reference']}))
-                move.write(to_write)
-
-        for move in to_post:
-            if move.is_sale_document() \
-                    and move.journal_id.sale_activity_type_id \
-                    and (move.journal_id.sale_activity_user_id or move.invoice_user_id).id not in (self.env.ref('base.user_root').id, False):
-                move.activity_schedule(
-                    date_deadline=min((date for date in move.line_ids.mapped('date_maturity') if date), default=move.date),
-                    activity_type_id=move.journal_id.sale_activity_type_id.id,
-                    summary=move.journal_id.sale_activity_note,
-                    user_id=move.journal_id.sale_activity_user_id.id or move.invoice_user_id.id,
-                )
-
-        customer_count, supplier_count = defaultdict(int), defaultdict(int)
-        for move in to_post:
-            if move.is_sale_document():
-                customer_count[move.partner_id] += 1
-            elif move.is_purchase_document():
-                supplier_count[move.partner_id] += 1
-        for partner, count in customer_count.items():
-            (partner | partner.commercial_partner_id)._increase_rank('customer_rank', count)
-        for partner, count in supplier_count.items():
-            (partner | partner.commercial_partner_id)._increase_rank('supplier_rank', count)
-
-        # Trigger action for paid invoices in amount is zero
-        to_post.filtered(
-            lambda m: m.is_invoice(include_receipts=True) and m.currency_id.is_zero(m.amount_total)
-        ).action_invoice_paid()
-
-        # Force balance check since nothing prevents another module to create an incorrect entry.
-        # This is performed at the very end to avoid flushing fields before the whole processing.
-        to_post._check_balanced()
-        return to_post
 
     def _reconciled_move_line(self):
         for line in self.line_ids:
-            id_move =[]
+            id_move = []
             if line.reconciled_move_id:
                 id_move.append(line.reconciled_move_id.id)
                 id_move.append(line.id)
@@ -388,18 +294,14 @@ class AccountMove(models.Model):
         self._reconciled_move_line()
         return res
 
-
-
-
-
     def button_draft(self):
         res = super(AccountMove, self).button_draft()
         for line in self.line_ids:
             if line.ineco_vat:
-                line.ineco_vat.write({'vatprd':False})
-            vats = self.env['ineco.account.vat'].search([('move_id','=',self.id)])
+                line.ineco_vat.write({'vatprd': False})
+            vats = self.env['ineco.account.vat'].search([('move_id', '=', self.id)])
             for vat in vats:
-                vat.write({'vatprd':False})
+                vat.write({'vatprd': False})
         if self.journal_id.input_tax:
             self.posted_before = False
             self.write({'auto_post': False, 'state': 'cancel'})
@@ -412,12 +314,168 @@ class AccountMove(models.Model):
                 'res_model': 'ineco.account.vat',
                 'type': 'ir.actions.act_window',
                 'context': {'search_default_false_vat': True},
-                'domain': [('tax_purchase_wait_ok','=',True),('move_line_id','!=',False)],
+                'domain': [('tax_purchase_wait_ok', '=', True), ('move_line_id', '!=', False)],
             }
         return res
 
+    def _post(self, soft=True):
+        """Post/Validate the documents.
 
+        Posting the documents will give it a number, and check that the document is
+        complete (some fields might not be required if not posted but are required
+        otherwise).
+        If the journal is locked with a hash table, it will be impossible to change
+        some fields afterwards.
 
+        :param soft (bool): if True, future documents are not immediately posted,
+            but are set to be auto posted automatically at the set accounting date.
+            Nothing will be performed on those documents before the accounting date.
+        :return Model<account.move>: the documents that have been posted
+        """
+        if not self.env.su and not self.env.user.has_group('account.group_account_invoice'):
+            raise AccessError(_("You don't have the access rights to post an invoice."))
+
+        for invoice in self.filtered(lambda move: move.is_invoice(include_receipts=True)):
+            if invoice.quick_edit_mode and invoice.quick_edit_total_amount and invoice.quick_edit_total_amount != invoice.amount_total:
+                raise UserError(_(
+                    "The current total is %s but the expected total is %s. In order to post the invoice/bill, "
+                    "you can adjust its lines or the expected Total (tax inc.).",
+                    formatLang(self.env, invoice.amount_total, currency_obj=invoice.currency_id),
+                    formatLang(self.env, invoice.quick_edit_total_amount, currency_obj=invoice.currency_id),
+                ))
+            if invoice.partner_bank_id and not invoice.partner_bank_id.active:
+                raise UserError(_(
+                    "The recipient bank account linked to this invoice is archived.\n"
+                    "So you cannot confirm the invoice."
+                ))
+            if float_compare(invoice.amount_total, 0.0, precision_rounding=invoice.currency_id.rounding) < 0:
+                raise UserError(_(
+                    "You cannot validate an invoice with a negative total amount. "
+                    "You should create a credit note instead. "
+                    "Use the action menu to transform it into a credit note or refund."
+                ))
+
+            if not invoice.partner_id:
+                if invoice.is_sale_document():
+                    raise UserError(_("The field 'Customer' is required, please complete it to validate the Customer Invoice."))
+                elif invoice.is_purchase_document():
+                    raise UserError(_("The field 'Vendor' is required, please complete it to validate the Vendor Bill."))
+
+            # Handle case when the invoice_date is not set. In that case, the invoice_date is set at today and then,
+            # lines are recomputed accordingly.
+            if not invoice.invoice_date:
+                if invoice.is_sale_document(include_receipts=True):
+                    invoice.invoice_date = fields.Date.context_today(self)
+                elif invoice.is_purchase_document(include_receipts=True):
+                    raise UserError(_("The Bill/Refund date is required to validate this document."))
+
+        if soft:
+            future_moves = self.filtered(lambda move: move.date > fields.Date.context_today(self))
+            for move in future_moves:
+                if move.auto_post == 'no':
+                    move.auto_post = 'at_date'
+                msg = _('This move will be posted at the accounting date: %(date)s', date=format_date(self.env, move.date))
+                move.message_post(body=msg)
+            to_post = self - future_moves
+        else:
+            to_post = self
+
+        for move in to_post:
+            if move.state == 'posted':
+                raise UserError(_('The entry %s (id %s) is already posted.') % (move.name, move.id))
+            if not move.line_ids.filtered(lambda line: line.display_type not in ('line_section', 'line_note')):
+                raise UserError(_('You need to add a line before posting.'))
+            if move.auto_post != 'no' and move.date > fields.Date.context_today(self):
+                date_msg = move.date.strftime(get_lang(self.env).date_format)
+                raise UserError(_("This move is configured to be auto-posted on %s", date_msg))
+            if not move.journal_id.active:
+                raise UserError(_(
+                    "You cannot post an entry in an archived journal (%(journal)s)",
+                    journal=move.journal_id.display_name,
+                ))
+            if move.display_inactive_currency_warning:
+                raise UserError(_(
+                    "You cannot validate a document with an inactive currency: %s",
+                    move.currency_id.name
+                ))
+
+            affects_tax_report = move._affect_tax_report()
+            lock_dates = move._get_violated_lock_dates(move.date, affects_tax_report)
+            if lock_dates:
+                move.date = move._get_accounting_date(move.invoice_date or move.date, affects_tax_report)
+
+        # Create the analytic lines in batch is faster as it leads to less cache invalidation.
+        to_post.line_ids._create_analytic_lines()
+        to_post.write({
+            'state': 'posted',
+            'posted_before': True,
+        })
+
+        # Trigger copying for recurring invoices
+        to_post.filtered(lambda m: m.auto_post not in ('no', 'at_date'))._copy_recurring_entries()
+
+        for invoice in to_post:
+            # Fix inconsistencies that may occure if the OCR has been editing the invoice at the same time of a user. We force the
+            # partner on the lines to be the same as the one on the move, because that's the only one the user can see/edit.
+            wrong_lines = invoice.is_invoice() and invoice.line_ids.filtered(lambda aml:
+                aml.partner_id != invoice.commercial_partner_id
+                and aml.display_type not in ('line_note', 'line_section')
+            )
+            if wrong_lines:
+                wrong_lines.write({'partner_id': invoice.commercial_partner_id.id})
+
+            invoice.message_subscribe([
+                p.id
+                for p in [invoice.partner_id]
+                if p not in invoice.sudo().message_partner_ids
+            ])
+
+            # Compute 'ref' for 'out_invoice'.
+
+            if invoice.move_type == 'out_invoice' and not invoice.payment_reference:
+                to_write = {
+                    'payment_reference': invoice._get_invoice_computed_reference(),
+                    'line_ids': []
+                }
+
+                for line in invoice.line_ids.filtered(lambda line: line.account_id.account_type in ('asset_receivable', 'liability_payable')):
+                    to_write['line_ids'].append((1, line.id, {'name': to_write['payment_reference']}))
+
+                # Remove payment_reference and set internal_number for reuse name of invoice
+                del(to_write['payment_reference'])
+                to_write['internal_number'] = invoice.name
+                #
+                invoice.write(to_write)
+
+            if (
+                invoice.is_sale_document()
+                and invoice.journal_id.sale_activity_type_id
+                and (invoice.journal_id.sale_activity_user_id or invoice.invoice_user_id).id not in (self.env.ref('base.user_root').id, False)
+            ):
+                invoice.activity_schedule(
+                    date_deadline=min((date for date in invoice.line_ids.mapped('date_maturity') if date), default=invoice.date),
+                    activity_type_id=invoice.journal_id.sale_activity_type_id.id,
+                    summary=invoice.journal_id.sale_activity_note,
+                    user_id=invoice.journal_id.sale_activity_user_id.id or invoice.invoice_user_id.id,
+                )
+
+        customer_count, supplier_count = defaultdict(int), defaultdict(int)
+        for invoice in to_post:
+            if invoice.is_sale_document():
+                customer_count[invoice.partner_id] += 1
+            elif invoice.is_purchase_document():
+                supplier_count[invoice.partner_id] += 1
+        for partner, count in customer_count.items():
+            (partner | partner.commercial_partner_id)._increase_rank('customer_rank', count)
+        for partner, count in supplier_count.items():
+            (partner | partner.commercial_partner_id)._increase_rank('supplier_rank', count)
+
+        # Trigger action for paid invoices if amount is zero
+        to_post.filtered(
+            lambda m: m.is_invoice(include_receipts=True) and m.currency_id.is_zero(m.amount_total)
+        )._invoice_paid_hook()
+
+        return to_post
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
@@ -432,8 +490,6 @@ class AccountMoveLine(models.Model):
                 data.tax_ok = True
             else:
                 data.tax_ok = False
-
-
 
     @api.depends('account_id')
     def _get_cheque(self):
@@ -459,11 +515,9 @@ class AccountMoveLine(models.Model):
     def _compute_parent_state(self):
         self.parent_state = self.move_id.state
 
-
-
     ineco_vat = fields.Many2one('ineco.account.vat', string='ineco_vat', ondelete='cascade')
     ineco_iv = fields.Char(string=u'เลขที่ใบกำกับ', size=32, required=False, copy=False, tracking=True,
-                          # default='New'
+                           # default='New'
                            )
     vat_ids = fields.One2many('ineco.account.vat', 'move_line_id', string='Vat', )
     wht_ids = fields.One2many('ineco.wht', 'move_line_id', string='With Holding Tax', )
@@ -480,10 +534,10 @@ class AccountMoveLine(models.Model):
     foreign = fields.Boolean(u'ต่างประเทศ')
     foreign_receivable = fields.Float(u'รับต่างประเทศ')
 
-    is_required_partner = fields.Boolean(string='Required Partner', compute='_compute_is_required_partner', store=True, readonly=False)
+    is_required_partner = fields.Boolean(string='Required Partner', compute='_compute_is_required_partner', store=True,
+                                         readonly=False)
     reconciled_move_id = fields.Many2one('account.move.line', string=u'เลขที่เอกสาร reconciled', copy=False, index=True,
-                           )
-
+                                         )
 
     @api.onchange('reconciled_move_id')
     def _up_reconciled_move_id(self):
@@ -493,8 +547,7 @@ class AccountMoveLine(models.Model):
             if line.reconciled_move_id.debit > 0:
                 line.credit = abs(line.reconciled_move_id.amount_residual)
 
-
-    @api.depends('account_id','move_id.state')
+    @api.depends('account_id', 'move_id.state')
     def _compute_is_required_partner(self):
         for line in self:
             # line.is_required_partner = line.account_id.user_type_id.type in ('receivable', 'payable')
@@ -502,6 +555,7 @@ class AccountMoveLine(models.Model):
                 line.is_required_partner = True
             else:
                 line.is_required_partner = False
+
     def _prepare_reconciliation_partials(self):
         # แก้ตัดเงินต่างประเทศ
         ''' Prepare the partials on the current journal items to perform the reconciliation.
@@ -538,7 +592,6 @@ class AccountMoveLine(models.Model):
                     debit_amount_residual_currency = debit_amount_residual
                     debit_line_currency = debit_line.company_currency_id
 
-
             # Move to the next available credit line.
             if not credit_line:
                 credit_line = next(credit_lines, None)
@@ -553,10 +606,9 @@ class AccountMoveLine(models.Model):
                     credit_amount_residual_currency = credit_amount_residual
                     credit_line_currency = credit_line.company_currency_id
 
-                if credit_line.foreign: # รับเงินต่างประเทศ
+                if credit_line.foreign:  # รับเงินต่างประเทศ
                     credit_amount_residual_currency = -credit_line.foreign_receivable
                     credit_line_currency = credit_line.currency_id
-
 
             min_amount_residual = min(debit_amount_residual, -credit_amount_residual)
             if debit_line_currency == credit_line_currency:
@@ -617,7 +669,6 @@ class AccountMoveLine(models.Model):
                 'credit_move_id': credit_line.id,
             })
         return partials_vals_list
-
 
     def action_open_vat(self):
         self.ensure_one()

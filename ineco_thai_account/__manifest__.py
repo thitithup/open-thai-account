@@ -23,7 +23,6 @@ Thailand Accounting
         "data/wht_data.xml",
         "security/security.xml",
         "security/group.xml",
-        # "security/ir.model.access.csv",
         'views/invoice_views.xml',
         "wizard/pay_wizard_view.xml",
         "wizard_back_tax_payment/wizard_back_payment_view.xml",
@@ -31,7 +30,6 @@ Thailand Accounting
         "wizard_sale_deposit/sale_wizard_deposit_view.xml",
         "refund_wizard/account_invoice_refund_view.xml",
         "wizard_merge_vendor_bill/picking_merge_vendor_bill_view.xml",
-
         "views/res_config_settings_views.xml",
         "views/account_billing_view.xml",
         "views/account_customer_deposit_view.xml",

@@ -49,7 +49,7 @@ class AccountPeriod(models.Model):
                 ('is_closed','=',False),
                 ('company_id', '=', company_id)
                 ]
-        result = self.search(args=args)
+        result = self.search(args)
         return result
 
     @api.model
