@@ -10,16 +10,18 @@ from odoo.exceptions import UserError
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    name = fields.Char(string='Number', copy=False,readonly=False, store=True,
-                       default='/',index=True,tracking=True,)
+    name = fields.Char(string='Number', copy=False, readonly=False, store=True,
+                       default='/', index=True, tracking=True, )
     change_number = fields.Boolean(string=u'Change Number', )
-    billing_id = fields.Many2one('ineco.billing', string=u'ใบวางบิล', copy=False,tracking=True,)
-    customer_deposit_ids = fields.One2many('ineco.customer.payment.deposit', 'invoice_id', string=u'มัดจำ',tracking=True,)
-    supplier_deposit_ids = fields.One2many('ineco.supplier.payment.deposit', 'invoice_id', string=u'จ่ายมัดจำ',tracking=True,)
-    partner_code = fields.Char(string=u'รหัส', related='partner_id.ref', readonly=True,tracking=True,)
+    billing_id = fields.Many2one('ineco.billing', string=u'ใบวางบิล', copy=False, tracking=True, )
+    customer_deposit_ids = fields.One2many('ineco.customer.payment.deposit', 'invoice_id', string=u'มัดจำ',
+                                           tracking=True, )
+    supplier_deposit_ids = fields.One2many('ineco.supplier.payment.deposit', 'invoice_id', string=u'จ่ายมัดจำ',
+                                           tracking=True, )
+    partner_code = fields.Char(string=u'รหัส', related='partner_id.ref', readonly=True, tracking=True, )
     ineco_reconciled_tax = fields.Many2one('ineco.account.vat', string='ineco_reconciled')
     select_pay = fields.Boolean('ทำจ่าย/รับชำระ')
-    sale_no = fields.Many2one('sale.order',u'SO.',tracking=True,copy=True)
+    sale_order_id = fields.Many2one('sale.order', string='Sale Order', tracking=True, copy=True)
 
     expense = fields.Boolean(u'บันทึกค่าใช้จ่าย',
                              related='journal_id.expense',
@@ -68,7 +70,7 @@ class AccountMove(models.Model):
 
     rate = fields.Float(digits=(12, 6), default=1.0, help='The rate of the currency to the currency of rate 1')
     internal_number = fields.Char(string="Number", copy=False, tracking=True,
-        help="Unique number of the invoice, computed automatically when the invoice is created.")
+                                  help="Unique number of the invoice, computed automatically when the invoice is created.")
     from_ip = fields.Char(string="มาจากไอพี")
     from_id = fields.Char(string="มาจากไอดี", index=True)
     temp_state = fields.Char(string="Temp State")
@@ -79,9 +81,9 @@ class AccountMove(models.Model):
         # self.customer_id.property_account_receivable_id.id
         # [('move_type', '=', 'out_refund')]
         if self.move_type == 'out_refund':
-           account_id = self.partner_id.property_account_receivable_id
-           if account_id.id != self.reversed_entry_id.partner_id.property_account_receivable_id.id:
-               raise UserError(_(f'ผังลูกหนี้ไม่ตรงกัน :ใบกำกับอ้างอิง {account_id.code}-{account_id.name}'))
+            account_id = self.partner_id.property_account_receivable_id
+            if account_id.id != self.reversed_entry_id.partner_id.property_account_receivable_id.id:
+                raise UserError(_(f'ผังลูกหนี้ไม่ตรงกัน :ใบกำกับอ้างอิง {account_id.code}-{account_id.name}'))
         elif self.move_type == 'in_refund':
             account_id = self.partner_id.property_account_payable_id
             if account_id.id != self.reversed_entry_id.partner_id.property_account_payable_id.id:
@@ -119,7 +121,7 @@ class AccountMove(models.Model):
             else:
                 currency_rates = self.currency_id._get_rates(self.company_id, self.invoice_date)
                 rate = currency_rates.get(self.currency_id.id)
-                self.update({'rate':rate})
+                self.update({'rate': rate})
 
     @api.onchange('rate')
     def _onchange_currency_id2(self):
@@ -130,15 +132,14 @@ class AccountMove(models.Model):
             rate = rate_obj.search([
                 ('currency_id', '=', self.currency_id.id),
                 ('name', '=', self.invoice_date),
-                ('rate','=',self.rate)
+                ('rate', '=', self.rate)
             ])
             if not rate:
                 rate_obj.create({'currency_id': self.currency_id.id, 'rate': self.rate, 'name': self.invoice_date})
             else:
                 raise UserError(_(u'rate ซ้ำในวันที่ดังกล่าว รบกวนแก้ไข rate ค่าเงินนั้นๆก่อน'))
 
-
-    @api.onchange('partner_id','invoice_date')
+    @api.onchange('partner_id', 'invoice_date')
     def _onchange_partner_deposit(self):
         if not self.invoice_date:
             self.get_update_deposit()
@@ -194,7 +195,8 @@ class AccountMove(models.Model):
                 if line.price_unit <= 0.0:
                     raise UserError("กรุณาระบุจำนวนตัดมัดจำด้วยครับ!")
                 if line.price_unit > line.customer_deposit_ids.amount_residual:
-                    raise UserError("ยอดตัดมัดจำมากกว่า ยอดคงค้าง เลขที่ {} จำนวนคงค้างที่ตัดได้ {}".format(line.customer_deposit_ids.name,line.customer_deposit_ids.amount_residual))
+                    raise UserError("ยอดตัดมัดจำมากกว่า ยอดคงค้าง เลขที่ {} จำนวนคงค้างที่ตัดได้ {}".format(
+                        line.customer_deposit_ids.name, line.customer_deposit_ids.amount_residual))
                 line.customer_deposit_ids.create_history(line.price_unit, self.name)
 
     def delete_history_deposit(self):
@@ -255,7 +257,7 @@ class AccountMove(models.Model):
             self.partner_customer_domain = True
 
     def delete_vat(self):
-        invoices = self.env['ineco.account.vat'].search([('invoice_id','=',self.id)])
+        invoices = self.env['ineco.account.vat'].search([('invoice_id', '=', self.id)])
         if invoices:
             invoices.unlink()
 
