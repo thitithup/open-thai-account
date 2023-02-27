@@ -126,20 +126,31 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+                <field name="vat" position="before">
+                    <field name="show_thai_address"/>
+                </field>
                 <field name="street2" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                    <attribute name="attrs">{'invisible': [('show_thai_address','=',True)]}</attribute>
                 </field>
                 <field name="city" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                    <attribute name="attrs">{'invisible': [('show_thai_address','=',True)]}</attribute>
                 </field>
                 <field name="state_id" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                    <attribute name="attrs">{'invisible': [('show_thai_address','=',True)]}</attribute>
                 </field>
                 <field name="street2" position="before">
-                    <field name="district_id" required="0" placeholder="แขวง/ตำบล" class="o_address_street"
+                    <field name="district_id"
+                           attrs="{'invisible': [('show_thai_address','=',False)],'required': [('show_thai_address','=',True)]}"
+                           placeholder="แขวง/ตำบล" class="o_address_street"
                            context="{'show_fully': 1}" options='{"no_open": true}'/>
-                    <field name="amphur_id" placeholder="เขต/อำเภอ" class="o_address_city" options='{"no_open": true}'/>
-                    <field name="province_id" placeholder="จังหวัด" class="o_address_state"
+                    <field name="amphur_id"
+                           attrs="{'invisible': [('show_thai_address','=',False)],'required': [('show_thai_address','=',True)]}"
+                           placeholder="เขต/อำเภอ"
+                           class="o_address_city" options='{"no_open": true}'/>
+                    <field name="province_id"
+                           attrs="{'invisible': [('show_thai_address','=',False)],'required': [('show_thai_address','=',True)]}"
+                           placeholder="จังหวัด"
+                           class="o_address_state"
                            options='{"no_open": true}'/>
                 </field>
                 <xpath expr="//page[@name='contact_addresses']/field/form/sheet/group/group[1]/div/div/field[@name='street2']"
@@ -161,7 +172,8 @@
                         'default_district_id': district_id,
                         'default_amphur_id': amphur_id,
                         'default_province_id': province_id,
-                        'default_type': 'other'}</attribute>
+                        'default_type': 'other'}
+                    </attribute>
                 </xpath>
 
                 <xpath expr="//page[@name='contact_addresses']/field/form/sheet/group/group[1]/div/div/field[@name='street2']"

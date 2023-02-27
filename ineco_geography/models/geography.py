@@ -5,11 +5,9 @@ from odoo import api, fields, models, _
 from odoo.osv import expression
 
 
-# from openerp import api, fields, models, _
-
-
 class InecoGeography(models.Model):
     _name = "ineco.geography"
+    _inherit = ['mail.thread']
     _description = "Geography"
     _order = 'code, name'
 
@@ -22,6 +20,7 @@ class InecoGeography(models.Model):
 class InecoProvince(models.Model):
     _name = "ineco.province"
     _description = "Province"
+    _inherit = ['mail.thread']
     _order = 'code, name'
 
     name = fields.Char(string='Name', required=True, copy=False, index=True, tracking=True)
@@ -45,6 +44,7 @@ class InecoProvince(models.Model):
 class InecoAmphur(models.Model):
     _name = "ineco.amphur"
     _description = "Amphur"
+    _inherit = ['mail.thread']
     _order = 'code, name'
 
     name = fields.Char(string='Name', required=True, copy=False, index=True, tracking=True)
@@ -69,6 +69,7 @@ class InecoAmphur(models.Model):
 
 class InecoDistrict(models.Model):
     _name = "ineco.district"
+    _inherit = ['mail.thread']
     _description = "District"
     _order = 'code, name'
 
@@ -105,6 +106,7 @@ class InecoDistrict(models.Model):
 
 class InecoZipcode(models.Model):
     _name = "ineco.zipcode"
+    _inherit = ['mail.thread']
     _description = "Zipcode"
     _order = 'name'
 
