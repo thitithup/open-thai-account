@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Eficent Business and IT Consulting Services S.L.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+    <data noupdate="1">
+
+
+        <record model="ir.module.category" id="module_category_ineco_petty_cash">
+            <field name="name">เงินสดย่อย</field>
+            <field name="description">Helps you manage your survey for review of different-different users.</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="group_ineco_petty_cash_user" model="res.groups">
+            <field name="name">ผู้ดูแลเงินสดในมือ</field>
+            <field name="comment">ผู้ดูแลเงินสดในมือที่ได้รีบมอบหมาย</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="ineco_thai_account.module_category_ineco_petty_cash"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record id="group_petty_cash_manager" model="res.groups">
+            <field name="name">Manager เงินสดในมือ</field>
+            <field name="implied_ids" eval="[(4, ref('ineco_thai_account.group_ineco_petty_cash_user'))]"/>
+            <field name="category_id" ref="ineco_thai_account.module_category_ineco_petty_cash"/>
+        </record>
+
+        <record id="petty_cash_request_rule_one" model="ir.rule">
+            <field name="name">เห็นแค่ผู้ดูแลเงินสดในมือ</field>
+            <field name="model_id" ref="model_ineco_petty_cash"/>
+            <field name="groups" eval="[(6,0, [ref('ineco_thai_account.group_ineco_petty_cash_user')])]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+        </record>
+
+
+        <record id="petty_cash_request_rule_all" model="ir.rule">
+            <field name="name">เห็นเงินสดในมือทุกคนที่ดูแล</field>
+            <field name="model_id" ref="model_ineco_petty_cash"/>
+            <field name="groups" eval="[(6,0, [ref('ineco_thai_account.group_petty_cash_manager')])]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+
+        <record id="group_change_number_acc" model="res.groups">
+            <field name="name">เปลี่ยนเลขที่เอกสาร ทางบัญชี</field>
+        </record>
+
+
+    </data>
+
+
+</odoo>

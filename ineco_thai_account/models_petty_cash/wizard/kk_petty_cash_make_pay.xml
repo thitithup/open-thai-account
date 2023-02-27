@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_kk_petty_cash_make_pay" model="ir.ui.view">
+            <field name="name">ineco.petty.cash.make.pay</field>
+            <field name="model">ineco.petty.cash.make.pay</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="control_id" readonly="1"/>
+<!--                            <field name="date_start"/>-->
+<!--                            <field name="date_end"/>-->
+                        </group>
+                        <group>
+<!--                            <field name="amount" readonly="1"/>-->
+                            <field name="amount_withdraw"/>
+<!--                            <field name="amount_control"/>-->
+
+                        </group>
+
+<!--                        <newline/>-->
+<!--                        <field name="item_ids" nolabel="1" colspan="2" readonly="1">-->
+<!--                            <tree>-->
+<!--                                <field name="date" />-->
+<!--                                <field name="name"/>-->
+<!--                                <field name="employee_id"/>-->
+<!--                                <field name="department_id"/>-->
+<!--                                <field name="total_amount"/>-->
+<!--                            </tree>-->
+
+<!--                        </field>-->
+                    </group>
+                    <footer>
+                        <button name="create_pay" string="สร้าง" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_ineco_petty_cash_make_pay" model="ir.actions.act_window">
+            <field name="name">ตั้งเบิกเงินสดย่อย</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ineco.petty.cash.make.pay</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>
+

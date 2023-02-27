@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Customer Deposit -->
+        <record id="view_ineco_petty_cash_invoice_form" model="ir.ui.view">
+            <field name="name">ineco.petty.cash.invoice.form</field>
+            <field name="model">ineco.petty.cash.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Billing" version="7.0">
+                    <header>
+                        <button name="button_draft" type="object" states="cancel" string="ร่าง"
+                                class="oe_highlight" groups="account.group_account_invoice"/>
+                        <button name="button_cancel" type="object" states="post,done" string="ยกเลิก"
+                                class="oe_highlight" groups="account.group_account_invoice"/>
+                        <button name="action_expense_post" type="object" states="draft" string="Validate"
+                                class="oe_highlight" groups="account.group_account_invoice"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,post,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="ref" attrs="{'readonly': [('state','in',('post','cancel'))]}"/>
+                                <field name="partner_id"
+                                       domain="[('supplier','=',True),
+                                               ('is_company','=',True),
+                                              ('company_id','=',company_id)]"
+                                       options="{'no_create': True}"
+                                       attrs="{'readonly': [('state','in',('post','cancel'))]}"/>
+                                <field name="journal_id" options="{'no_create': True}"
+                                       attrs="{'readonly': [('state','in',('post','cancel'))]}"
+                                       domain="[('petty','=',True),
+                                       ('type','=','pay'),
+                                       ('company_id','=',company_id)]"/>
+
+                                <field name="cash_id" options="{'no_create': True}" attrs="{'readonly': [('state','in',('post','cancel'))]}"/>
+                                <field name="account_id" string="ผังบัญชี" readonly="1"/>
+                                <field name="company_id" attrs="{'readonly': [('state','in',('post','cancel'))]}"/>
+                            </group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="date" attrs="{'readonly': [('state','in',('post','cancel'))]}"/>
+                                <field name="debit_account_id" string="ผังค่าใช้จ่าย" required="1"
+                                       attrs="{'readonly': [('state','in',('post','cancel'))]}"
+                                       options="{'no_create': True}"/>
+                                <field name="analytic_account_id"
+                                       attrs="{'readonly': [('state','in',('post','cancel'))]}"
+                                       domain="['|', ('company_id', '=', company_id), ('company_id', '=', False)]"
+                                       groups="analytic.group_analytic_accounting" options="{'no_create': True}"/>
+                                <field name="analytic_tag_ids" widget="many2many_tags"
+                                       attrs="{'readonly': [('state','in',('post','cancel'))]}"
+                                       options="{'no_create': True}"/>
+                                <field name="move_id" readonly="1"/>
+                                <field name="tax_type" attrs="{'readonly': [('state','in',('post','cancel'))]}"/>
+                                <field name="tax_purchase_wait_ok" attrs="{'readonly': [('state','in',('post','cancel'))]}"/>
+
+                            </group>
+
+
+                        </group>
+                        <notebook>
+                            <page string="รายการ">
+                                <field name="line_ids" nolabel="1" colspan="4" attrs="{'readonly': [('state','in',('post','cancel'))]}">
+                                    <tree string="Detail" editable="bottom">
+                                        <field name="name"/>
+                                        <field name="unit_amount"/>
+                                        <field name="quantity"/>
+                                        <!--                                        <field name="untaxed_amount"/>-->
+                                        <field name="total_amount" invisible="0"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="amount_untaxed"/>
+                                    <div class="o_row " colspan="8">
+                                        <div class="o_row oe_right" colspan="8">
+                                            <label for="amount_type_tax" string="อัตราภาษี" class="oe_inline"/>
+                                            <field name="amount_type_tax" class="oe_inline"/>
+                                            <label for="amount_tax" string="TAX" class="oe_inline"/>
+                                            <field name="amount_tax"/>
+                                        </div>
+                                    </div>
+                                    <field name="amount_total"/>
+                                    <field name="amount_total" class="oe_subtotal_footer_separator"
+                                           attrs="{'invisible': [('amount_tax', '=', 0)]}"/>
+
+                                </group>
+                            </page>
+                            <page string="ภาษีหัก ณ ที่จ่าย">
+                                <field name="wht_ids" colspan="4"
+                                       attrs="{'readonly': [('state','in',('post','cancel'))]}"
+                                       context="{'default_wht_type':'purchase','default_date_doc':date,'default_partner_id':partner_id}">
+                                    <tree string="With holding tax">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="date_doc"/>
+                                        <field name="partner_id"/>
+                                        <field name="base_amount" sum="Total"/>
+                                        <field name="tax" sum="Tax"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_ineco_petty_cash_invoice_tree" model="ir.ui.view">
+            <field name="name">ineco.petty.cash.invoice.tree</field>
+            <field name="model">ineco.petty.cash.invoice</field>
+            <field name="arch" type="xml">
+                <tree string="Customer Deposit">
+                    <field name="name" invisible="0"/>
+                    <field name="ref"/>
+                    <field name="partner_id"/>
+                    <field name="cash_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_ineco_petty_cash_invoice" model="ir.actions.act_window">
+            <field name="name">บันทึกค่าใช้จ่าย</field>
+            <field name="res_model">ineco.petty.cash.invoice</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_ineco_petty_cash_invoice_tree"/>
+            <field name="context">{}</field>
+            <field name="domain"></field>
+            <!--            <field name="search_view_id" ref="view_ineco_customer_deposit_search"/>-->
+        </record>
+
+        <menuitem
+                id="menu_action_ineco_petty_cash_invoice_root"
+                sequence="0"
+                name="บันทึกค่าใช้จ่าย"
+                parent="menu_action_ineco_petty_cash_root"
+
+        />
+
+        <menuitem action="action_ineco_petty_cash_invoice" id="menu_action_ineco_petty_cash_invoice"
+                  parent="menu_action_ineco_petty_cash_invoice_root" sequence="0"/>
+
+    </data>
+</odoo>

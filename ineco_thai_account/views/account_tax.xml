@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_ineco_br_account_tax_form">
+        <field name="name">l10n_ineco_account.tax.form</field>
+        <field name="model">account.tax</field>
+        <field name="inherit_id" ref="account.view_tax_form"/>
+        <field name="arch" type="xml">
+            <field position="after" name="type_tax_use">
+                <field name="tax_break" attrs="{'invisible': [('type_tax_use','in',('none'))]}"/>
+            </field>
+        </field>
+    </record>
+
+
+</odoo>

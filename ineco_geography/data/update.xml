@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    <data>
+        <record forcecreate="True" id="ineco_cron_res_partner_update_adr2" model="ir.cron">
+            <field name="name">partner_update_adr</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model.daily_update_partner_update_adr(205209)</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+
+
+    </data>
+
+
+</openerp>

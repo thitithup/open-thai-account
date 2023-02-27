@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_sale_order_form_inherit_customer_deposit" model="ir.ui.view">
+            <field name="name">sale.order.form.customer.deposit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="partner_id" position="attributes">
+                        <attribute name="domain">[('customer','=',True),('supplier','=',False)]</attribute>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

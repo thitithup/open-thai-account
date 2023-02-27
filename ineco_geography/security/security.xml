@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="secure_ineco_geography" model="ir.model.access">
+            <field name="name">Employees</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_geography"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="secure_ineco_province" model="ir.model.access">
+            <field name="name">Employees</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_province"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="secure_ineco_amphur" model="ir.model.access">
+            <field name="name">Employees</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_amphur"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="secure_ineco_district" model="ir.model.access">
+            <field name="name">Employees</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_district"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="secure_ineco_zipcode" model="ir.model.access">
+            <field name="name">Employees</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_zipcode"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="secure_ineco_geography_manager" model="ir.model.access">
+            <field name="name">Manager</field>
+            <field name="group_id" ref="base.group_erp_manager"/>
+            <field name="model_id" ref="model_ineco_geography"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="secure_ineco_province_manager" model="ir.model.access">
+            <field name="name">Manager</field>
+            <field name="group_id" ref="base.group_erp_manager"/>
+            <field name="model_id" ref="model_ineco_province"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="secure_ineco_amphur_manager" model="ir.model.access">
+            <field name="name">Manager</field>
+            <field name="group_id" ref="base.group_erp_manager"/>
+            <field name="model_id" ref="model_ineco_amphur"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="secure_ineco_district_manager" model="ir.model.access">
+            <field name="name">Manager</field>
+            <field name="group_id" ref="base.group_erp_manager"/>
+            <field name="model_id" ref="model_ineco_district"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="secure_ineco_zipcode_manager" model="ir.model.access">
+            <field name="name">Manager</field>
+            <field name="group_id" ref="base.group_erp_manager"/>
+            <field name="model_id" ref="model_ineco_zipcode"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+    </data>
+</openerp>

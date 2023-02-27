@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+
+        <record id="action_ineco_move_pay" model="ir.actions.act_window">
+            <field name="name">สมุดรายวันจ่าย</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('journal_id.type','=', 'pay')]</field>
+            <field name="context">{'default_move_type_thai': 'pay'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a journal entry.
+                </p>
+                <p>
+                    A journal entry consists of several journal items, each of
+                    which is either a debit or a credit transaction.
+                </p>
+                <p>
+                    Odoo automatically creates one journal entry per accounting
+                    document: invoice, refund, supplier payment, bank statements,
+                    etc. So, you should record journal entries manually only/mainly
+                    for miscellaneous operations.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_ineco_move_pay_tree">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_ineco_account_move_tree"/>
+            <field name="act_window_id" ref="action_ineco_move_pay"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_ineco_move_pay_form">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account.view_move_form"/>
+            <field name="act_window_id" ref="action_ineco_move_pay"/>
+        </record>
+
+        <menuitem parent="menu_ineco_account_entry"
+                  id="menu_action_ineco_move_pay"
+                  action="action_ineco_move_pay"
+                  sequence="10"/>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--ระบบรายงานบัญชีไทย-->
+
+        <menuitem name="ระบบรายงานบัญชีไทย"
+                  id="menu_account_thai_report_all"
+                  parent="account.menu_finance_reports"
+                  sequence="18"/>
+
+
+        <!--1.การ์ดเจ้าหนี้-->
+        <record model="ir.actions.act_url" id="action_account_card_of_creditor">
+            <field name="name">2.การ์ดเจ้าหนี้</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/card_of_creditor_1_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="การ์ดเจ้าหนี้"
+                  id="menu_account_card_of_creditor"
+                  action="action_account_card_of_creditor"
+                  sequence="12"
+                  parent="menu_account_thai_report_all"/>
+
+
+        <!--2.การ์ดลูกหนี้-->
+        <record model="ir.actions.act_url" id="action_account_card_of_debtor">
+            <field name="name">1.การ์ดลูกหนี้</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/card_of_creditor_1_1_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="การ์ดลูกหนี้"
+                  id="menu_account_card_of_debtor"
+                  action="action_account_card_of_debtor"
+                  sequence="11"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--3.อายุลูกหนี้เกินกำหนด-->
+        <record model="ir.actions.act_url" id="action_account_report_partneraging">
+            <field name="name">1.อายุลูกหนี้เกินกำหนด</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_partner_aging_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="อายุลูกหนี้เกินกำหนด"
+                  id="menu_account_report_partneraging"
+                  action="action_account_report_partneraging"
+                  sequence="13"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--4.อายุเจ้าหนี้เกินกำหนด-->
+        <record model="ir.actions.act_url" id="action_account_report_partneraging_1">
+            <field name="name">1.อายุเจ้าหนี้เกินกำหนด</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_partner_aging_1_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="อายุเจ้าหนี้เกินกำหนด"
+                  id="menu_account_report_partneraging_1"
+                  action="action_account_report_partneraging"
+                  sequence="14"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--5.ภาษีขาย-->
+        <record model="ir.actions.act_url" id="action_account_report_report_sale_tax_2_1">
+            <field name="name">5.รายงานภาษีขาย</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_sale_tax_2_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="รายงานภาษีขาย"
+                  id="menu_account_report_report_sale_tax_2_1"
+                  action="action_account_report_report_sale_tax_2_1"
+                  sequence="14"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--6.ภาษีซื้อ-->
+        <record model="ir.actions.act_url" id="action_account_report_report_sale_tax_2_1_1">
+            <field name="name">6.รายงานภาษีซื้อ</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_sale_tax_2_1_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="รายงานภาษีซื้อ"
+                  id="menu_account_report_report_sale_tax_2_1_1"
+                  action="action_account_report_report_sale_tax_2_1_1"
+                  sequence="15"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--7.รายงานบัญชีแยกประเภท-->
+        <record model="ir.actions.act_url" id="action_account_report_report_general_ledger2_2">
+            <field name="name">7.รายงานบํญชีแยกประเภท</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_general_ledger2_4_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="รายงานบัญชีแยกประเภท"
+                  id="menu_account_report_report_general_ledger2_2"
+                  action="action_account_report_report_general_ledger2_2"
+                  sequence="16"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--8.รายงาน สมุดรายวันต่างๆ-->
+        <record model="ir.actions.act_url" id="action_account_report_journal_report">
+            <field name="name">8.รายงานสมุดรายวันต่างๆ</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/journal_report&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="รายงานสมุดรายวันต่างๆ"
+                  id="menu_account_report_journal_report"
+                  action="action_account_report_journal_report"
+                  sequence="16"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--9.รายงาน งบทดลอง-->
+        <record model="ir.actions.act_url" id="action_account_report_report_tial_balance">
+            <field name="name">9.งบทดลอง</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_trial_balance_2019&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="งบทดลอง"
+                  id="menu_account_report_report_tial_balance"
+                  action="action_account_report_report_tial_balance"
+                  sequence="16"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--10.รายงานสต๊อกการ์ด (มูลค่าภาษี)-->
+        <record model="ir.actions.act_url" id="action_account_report_report_stock_card_tax2">
+            <field name="name">10.รายงานสต๊อกการ์ด (มูลค่าภาษี)</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_stock_card_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="รายงานสต๊อกการ์ด (มูลค่าภาษี)"
+                  id="menu_account_report_report_stock_card_tax2"
+                  action="action_account_report_report_stock_card_tax2"
+                  sequence="17"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--11.รายงานสรุปสินค้าคงเหลือ (มูลค่าภาษี)-->
+        <record model="ir.actions.act_url" id="action_account_report_report_stock_card_tax">
+            <field name="name">11.รายงานสรุปสินค้าคงเหลือ (มูลค่าภาษี)</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_stock_card_tax&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="รายงานสรุปสินค้าคงเหลือ (มูลค่าภาษี)"
+                  id="menu_account_report_report_stock_card_tax"
+                  action="action_account_report_report_stock_card_tax"
+                  sequence="18"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--12.รายงานสินค้าเคลื่อนไหว (รวมสินค้าบัญชี)-->
+        <record model="ir.actions.act_url" id="action_account_report_stock_sale">
+            <field name="name">12.รายงานสินค้าเคลื่อนไหว (รวมสินค้าบัญชี)</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/stock_sale&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="รายงานสินค้าเคลื่อนไหว (รวมสินค้าบัญชี)"
+                  id="menu_account_report_stock_sale"
+                  action="action_account_report_stock_sale"
+                  sequence="19"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--13.รายงานสต๊อกการ์ด คลังสินค้า (Stock Card)-->
+        <record model="ir.actions.act_url" id="action_account_report_report_stock_card">
+            <field name="name">13.รายงานสต๊อกการ์ด คลังสินค้า (Stock Card)</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_stock_card&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="รายงานสต๊อกการ์ด คลังสินค้า (Stock Card)"
+                  id="menu_account_report_report_stock_card"
+                  action="action_account_report_report_stock_card"
+                  sequence="20"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--14.สถานะลูกหนี้-->
+        <record model="ir.actions.act_url" id="action_account_report_status_of_debtor">
+            <field name="name">14.สถานะลูกหนี้</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/report_partner_aging_2_2&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="สถานะลูกหนี้"
+                  id="menu_account_report_status_of_debtor"
+                  action="action_account_report_status_of_debtor"
+                  sequence="21"
+                  parent="menu_account_thai_report_all"/>
+
+        <!--15.สถานะเจ้าหนี้-->
+        <record model="ir.actions.act_url" id="action_account_report_status_of_creditor">
+            <field name="name">15.สถานะเจ้าหนี้</field>
+            <field name="url">
+                http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&amp;reportUnit=/ineco_15/account/report/account_receivabl_summary_1_1&amp;j_username=jasperadmin&amp;j_password=jasperadmin&amp;decorate=no
+            </field>
+            <!--<field name="target">self</field>-->
+            <field name="target">new</field>
+        </record>
+        <menuitem name="สถานะเจ้าหนี้"
+                  id="menu_account_report_status_of_creditor"
+                  action="action_account_report_status_of_creditor"
+                  sequence="21"
+                  parent="menu_account_thai_report_all"/>
+
+
+    </data>
+</odoo>

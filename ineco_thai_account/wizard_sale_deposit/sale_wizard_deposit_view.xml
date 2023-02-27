@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_sale_wizard_deposit" model="ir.ui.view">
+            <field name="name">view.sale.wizard.deposit</field>
+            <field name="model">sale.wizard.deposit</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create PAY" version="7.0">
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="name"/>
+                            <label for="default_amount" string="ยอดหนี้ก่อนVat"/>
+                            <div class="o_row no-gutters d-flex">
+                              <field name="default_amount" readonly="1"/>
+                                <span>บาท</span>
+
+                                <label for="is_percent" string="คิดเปอร์เซ็นต์" class="oe_inline"/>
+                                <field name="is_percent"/>
+
+                                <label for="percent_amount" string=" "
+                                       attrs='{"invisible": [("is_percent", "=", False)]}'
+                                       class="oe_inline" />
+                                <field name="percent_amount"  attrs='{"invisible": [("is_percent", "=", False)]}'/>
+                                <span  attrs='{"invisible": [("is_percent", "=", False)]}'>%</span>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="tax_type"/>
+                            <field name="amount_type_tax"/>
+                        </group>
+                        <newline/>
+                        <group>
+                            <field name="amount_untaxed" />
+                            <field name="amount_tax"/>
+                            <field name="amount_receipt"/>
+                        </group>
+                        <group>
+                            <field name="image" widget='image'/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_create_deposit" string="สร้างมัดจำ" type="object"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_sale_wizard_deposit" model="ir.actions.act_window">
+            <field name="name">สร้างรับมัดจำ</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.wizard.deposit</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+
+
+
+    </data>
+</openerp>
+

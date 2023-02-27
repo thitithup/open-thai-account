@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Eficent Business and IT Consulting Services S.L.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+    <data noupdate="0">
+
+
+        <record id="secure_ineco_billing_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_billing"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="secure_ineco_customer_payment_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_payment"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_ineco_customer_payment_deposit_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_payment_deposit"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_ineco_customer_payment_line_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_payment_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_ineco_customer_payment_other_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_payment_other"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_ineco_customer_payment_transfer_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_payment_transfer"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_ineco_customer_payment_exchange_rate_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_payment_exchange_rate"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_ineco_customer_deposit_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_deposit"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_ineco_customer_deposit_line_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_deposit_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="secure_ineco_customer_deposit_other_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_customer_deposit_other"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="secure_pay_wizard_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_pay_wizard"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="securepay_wizard_line_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_pay_wizard_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_cheque_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_cheque"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="securepay_ineco_wht_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_wht"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_wht_line_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_wht_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_wht_pnd_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_wht_pnd"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="securepay_ineco_wht_type_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_wht_type"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="securepay_ineco_account_vat_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_account_vat"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_supplier_payment_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_supplier_payment"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_supplier_payment_line_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_supplier_payment_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_supplier_payment_deposit_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_supplier_payment_deposit"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_supplier_payment_other_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_supplier_payment_other"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_supplier_deposit_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_supplier_deposit"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_supplier_deposit_line_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_supplier_deposit_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_model_ineco_petty_cash_line_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_petty_cash_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="securepay_ineco_supplier_deposit_other_user" model="ir.model.access">
+            <field name="name">User</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="model_ineco_supplier_deposit_other"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <!--        base.group_system-->
+
+        <record id="secure_ineco_billing_system" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="model_ineco_billing"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="secure_deposit_history_line_system" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="model_deposit_history_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_model_ineco_petty_cash" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="model_ineco_petty_cash"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_model_ineco_petty_cash_line" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_ineco_petty_cash_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_model_ineco_pay_in_petty_cash" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_ineco_pay_in_petty_cash"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_model_ineco_pay_in_petty_cash_line" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_ineco_pay_in_petty_cash_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_model_ineco_petty_cash_make_pay" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_ineco_petty_cash_make_pay"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_model_ineco_petty_cash_make_pay_line" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_ineco_petty_cash_make_pay_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_model_ineco_petty_cash_invoice_line" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_ineco_petty_cash_invoice_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_model_ineco_petty_cash_invoice" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_ineco_petty_cash_invoice"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+        <record id="secure_supplier_deposit_history_line" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_supplier_deposit_history_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_model_wizard_back_tax_payment" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_wizard_back_tax_payment"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="secure_wizard_back_tax_payment_line" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_wizard_back_tax_payment_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_model_wizard_back_tax" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_wizard_back_tax"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_model_wizard_back_tax_line" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="model_id" ref="ineco_thai_account.model_wizard_back_tax_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+        <record id="secure_model_sale_wizard_deposit" model="ir.model.access">
+            <field name="name">system</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="ineco_thai_account.model_sale_wizard_deposit"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="access_model_picking_merge_vendor_bill_user" model="ir.model.access">
+            <field name="name">user</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="ineco_thai_account.model_picking_merge_vendor_bill"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="access_model_picking_merge_vendor_bill_line_user" model="ir.model.access">
+            <field name="name">user</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="model_id" ref="ineco_thai_account.model_picking_merge_vendor_bill_line"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+
+    </data>
+</odoo>

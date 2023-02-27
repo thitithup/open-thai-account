@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_stock_picking_form_ineco_artisan_01" model="ir.ui.view">
+            <field name="name">stock.picking.form.ineco.artisan.01</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <button name="button_validate" position="after">
+                    <button name="action_invoice_create_vendor_bill" string="Create Vendor Bill" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|','|','|','|',('merge_invoice','=',True),('state','!=','done'),('is_create_invoice_customer','=',True),('is_create_invoice_vendor','!=',True),('invoice_id','!=',False)]}"
+                            groups="stock.group_stock_user"/>
+                    <button name="action_invoice_create" string="Create Customer Invoice" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|','|','|','|',('merge_invoice','=',True),('state','!=','done'),('is_create_invoice_vendor','=',True),('is_create_invoice_customer','!=',True),('invoice_id','!=',False)]}"
+                            groups="stock.group_stock_user"/>
+                </button>
+
+                <field name="origin" position="after">
+                    <field name="is_create_invoice_vendor" invisible="1"/>
+                    <field name="is_create_invoice_customer" invisible="1"/>
+                    <field name="supplier_invoice_number"
+                           attrs="{'invisible': [('is_create_invoice_vendor','=',False)],'required': [('is_create_invoice_vendor','=',True)]}"/>
+                    <field name="supplier_invoice_date"
+                           attrs="{'invisible': [('is_create_invoice_vendor','=',False)], 'required': [('is_create_invoice_vendor','=',True)]}"/>
+                    <field name="invoice_id" groups="base.group_no_one"/>
+                    <field name="merge_invoice" groups="base.group_no_one" />
+                </field>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

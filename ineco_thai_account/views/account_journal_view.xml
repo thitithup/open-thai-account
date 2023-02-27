@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+<!--        <record id="ineco_account_bank_form" model="ir.ui.view">-->
+<!--            <field name="name">ineco.account.bank.form</field>-->
+<!--            <field name="model">account.journal</field>-->
+<!--            <field name="inherit_id" ref="account.view_account_bank_journal_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <field name="bank_acc_number" position="attributes">-->
+<!--                    <attribute name="required">True</attribute>-->
+<!--                </field>-->
+<!--                <field name="company_id" position="before">-->
+<!--                    <field name="default_debit_account_id" required="1"/>-->
+<!--                    <field name="default_credit_account_id" required="1" />-->
+<!--                </field>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="view_ineco_account_journal_form_inherit" model="ir.ui.view">
+            <field name="name">ineco.account.journal.form.inherit</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="name2"/>
+                    <field name="name_print"/>
+                    <field name="description"/>
+                    <field name="is_refund"
+                           attrs="{'invisible': [('type','not in',['sale','purchase'])]}"/>
+                    <field name="is_add_dn"
+                           attrs="{'invisible': [('type','not in',['sale','purchase'])]}"/>
+
+
+                    <field name="input_tax"  attrs="{'invisible': [('type','not in',('general'))],
+                                                     'required': [('type','=','general')]}"/>
+                    <field name="ex" attrs="{'invisible': [('type','!=','sale')],
+                                                     'required': [('type','=','sale')]}"/>
+                    <field name="expense" attrs="{'required': [('type','not in',('general','pay'))]}"/>
+                    <field name="petty" attrs="{'invisible': [('type','not in',('general','pay'))]}"/>
+
+                    <field name="is_deposit" attrs="{'invisible': [('type','not in',('receive','pay'))]}"/>
+                </field>
+
+                <field name="code" position="after">
+                    <field name="secure_sequence_id"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

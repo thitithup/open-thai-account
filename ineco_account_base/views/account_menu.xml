@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_account_type" name="Account Type" action="account.action_account_type_form"
+                  parent="account.account_account_menu"/>
+
+    </data>
+</odoo>
+

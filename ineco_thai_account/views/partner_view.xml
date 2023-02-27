@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="ineco_partner_form" model="ir.ui.view">
+            <field name="name">ineco.res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <field name="vat" position="after">
+                    <field name="branch_no" />
+                </field>
+
+                <field name="property_payment_term_id" position="after">
+                    <field name="customer" />
+                </field>
+                <field name="property_supplier_payment_term_id" position="after">
+                    <field name="supplier" />
+                </field>
+
+            </field>
+        </record>
+
+
+        <record id="account.res_partner_action_customer" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_customer': 1,'res_partner_search_mode': 'customer', 'default_is_company': True, 'default_customer_rank': 1,'default_customer': True}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new customer in your address book
+              </p><p>
+                Odoo helps you easily track all activities related to a customer.
+              </p>
+            </field>
+        </record>
+<!--        ,'default_company_id': self.env.company.id-->
+
+        <record id="account.res_partner_action_supplier" model="ir.actions.act_window">
+            <field name="name">Vendors</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_supplier': 1,'res_partner_search_mode': 'supplier', 'default_is_company': True, 'default_supplier_rank': 1,'default_supplier': True}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new supplier in your address book
+              </p><p>
+                Odoo helps you easily track all activities related to a supplier.
+              </p>
+            </field>
+        </record>
+
+    </data>
+</openerp>
+
+
