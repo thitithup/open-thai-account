@@ -17,7 +17,7 @@ class AccountAccount(models.Model):
     deposit_ok = fields.Boolean(string=u'มัดจำ', copy=False, tracking=True)
     wht_purchase_ok = fields.Boolean(string=u'ภาษีหัก ณ ที่จ่าย', copy=False, tracking=True)
     wht_sale_ok = fields.Boolean(string=u'ภาษีถูกหัก ณ ที่จ่าย', copy=False, tracking=True)
-    wait = fields.Boolean(string=u'ภาษีซื้อรอนำส่ง', copy=False, track_visibility=True)
+    wait = fields.Boolean(string=u'ภาษีซื้อรอนำส่ง', copy=False, tracking=True)
     tax_sale_wait = fields.Boolean(string=u'ภาษีขายรอนำส่ง', copy=False, tracking=True)
     is_partner = fields.Boolean(string=u'ต้องมีข้อมูลลูกค้า', copy=False, tracking=True)
 

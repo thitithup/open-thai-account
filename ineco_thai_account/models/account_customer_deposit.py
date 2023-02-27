@@ -85,29 +85,29 @@ class InecoCustomerDeposit(models.Model):
             else:
                 receipt.has_residual = False
 
-    name = fields.Char(string=u'เลขที่ใบมัดจำ', size=32, required=True, copy=False, track_visibility='onchange',
+    name = fields.Char(string=u'เลขที่ใบมัดจำ', size=32, required=True, copy=False, tracking=True,
                        default='New')
     date = fields.Date(string=u'ลงวันที่', required=True, default=fields.Date.context_today,
-                       track_visibility='onchange')
-    date_due = fields.Date(string=u'วันที่นัดรับเงิน', required=True, track_visibility='onchange')
-    customer_id = fields.Many2one('res.partner', string=u'ลูกค้า', required=True, track_visibility='onchange')
-    note = fields.Text(string=u'หมายเหตุ', track_visibility='onchange')
+                       tracking=True)
+    date_due = fields.Date(string=u'วันที่นัดรับเงิน', required=True, tracking=True)
+    customer_id = fields.Many2one('res.partner', string=u'ลูกค้า', required=True, tracking=True)
+    note = fields.Text(string=u'หมายเหตุ', tracking=True)
     line_ids = fields.One2many('ineco.customer.deposit.line', 'payment_id', string=u'รายการรับชำระ')
     other_ids = fields.One2many('ineco.customer.deposit.other', 'payment_id', string=u'อื่นๆ')
     amount_receipt = fields.Float(string=u'ยอดรับชำระ', compute='_get_receipts')
     change_number = fields.Boolean(string=u'เปลี่ยนเลขใบเสร็จ', )
-    journal_id = fields.Many2one('account.journal', string=u'สมุดรายวันรับ', required=True, track_visibility='onchange')
+    journal_id = fields.Many2one('account.journal', string=u'สมุดรายวันรับ', required=True, tracking=True)
     state = fields.Selection([('draft', 'Draft'), ('post', 'Posted'), ('cancel', 'Cancel')],
-                             string=u'State', default='draft', track_visibility='onchange')
-    amount_vat = fields.Float(string=u'ยอดภาษีมูลค่าเพิ่ม', track_visibility='onchange', compute='_get_vat', copy=False)
-    amount_interest = fields.Float(string=u'ดอกเบี้ยรับ', track_visibility='onchange', copy=False)
-    amount_cash = fields.Float(string=u'เงินสด', track_visibility='onchange', copy=False)
-    amount_cheque = fields.Float(string=u'เช็ครับ', track_visibility='onchange', compute='_get_cheque', copy=False)
-    amount_wht = fields.Float(string=u'ภาษีหัก ณ ที่จ่าย', track_visibility='onchange', compute='_get_wht',
+                             string=u'State', default='draft', tracking=True)
+    amount_vat = fields.Float(string=u'ยอดภาษีมูลค่าเพิ่ม', tracking=True, compute='_get_vat', copy=False)
+    amount_interest = fields.Float(string=u'ดอกเบี้ยรับ', tracking=True, copy=False)
+    amount_cash = fields.Float(string=u'เงินสด', tracking=True, copy=False)
+    amount_cheque = fields.Float(string=u'เช็ครับ', tracking=True, compute='_get_cheque', copy=False)
+    amount_wht = fields.Float(string=u'ภาษีหัก ณ ที่จ่าย', tracking=True, compute='_get_wht',
                               copy=False)
-    amount_discount = fields.Float(string=u'ส่วนลดเงินสด', track_visibility='onchange', copy=False)
-    amount_paid = fields.Float(string=u'ยอดรับชำระ', track_visibility='onchange', copy=False)
-    amount_other = fields.Float(string=u'อื่นๆ', track_visibility='onchange', compute='_get_other', copy=False)
+    amount_discount = fields.Float(string=u'ส่วนลดเงินสด', tracking=True, copy=False)
+    amount_paid = fields.Float(string=u'ยอดรับชำระ', tracking=True, copy=False)
+    amount_other = fields.Float(string=u'อื่นๆ', tracking=True, compute='_get_other', copy=False)
     cheque_ids = fields.One2many('ineco.cheque', 'customer_deposit_id', string=u'เช็ครับ')
     vat_ids = fields.One2many('ineco.account.vat', 'customer_deposit_id', string=u'ภาษีขาย')
     wht_ids = fields.One2many('ineco.wht', 'customer_deposit_id', string=u'ภาษีหัก ณ ที่จ่าย')
@@ -120,7 +120,7 @@ class InecoCustomerDeposit(models.Model):
                                            ('included', u'ภาษีรวม')])
     amount_type_tax = fields.Float(required=True, digits=(16, 0), default=7)
     amount_deposit = fields.Float(string=u'ยอดรวมมัดจำ', compute='_get_receipts')
-    journal_name = fields.Char(u'เปลี่ยนเลขเล่มเอกสาร', track_visibility='onchange')
+    journal_name = fields.Char(u'เปลี่ยนเลขเล่มเอกสาร', tracking=True)
 
     company_id = fields.Many2one('res.company', string='Company', store=True, readonly=True, change_default=True,
                                  default=lambda self: self.env.company)
@@ -662,8 +662,8 @@ class InecoCustomerDepositLine(models.Model):
 
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
 
-    name = fields.Char(string=u'คำอธิบาย', required=True, index=True, copy=False, track_visibility='onchange')
-    amount_receipt = fields.Float(string=u'ยอดชำระ', copy=False, track_visibility='onchange')
+    name = fields.Char(string=u'คำอธิบาย', required=True, index=True, copy=False, tracking=True)
+    amount_receipt = fields.Float(string=u'ยอดชำระ', copy=False, tracking=True)
     amount_untaxed = fields.Float(string='ยอดก่อนภาษี')
     amount_tax = fields.Float(string='ภาษี')
     # amount_total = fields.Float(string='ยอดเงินรวม')
@@ -695,11 +695,11 @@ class InecoCustomerDepositOther(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
 
     name = fields.Many2one('account.account', string=u'ผังบัญชี', required=True, copy=False, index=True,
-                           track_visibility='onchange')
+                           tracking=True)
     amount = fields.Float(string=u'จำนวนเงิน', copy=False, compute='_compute_amount', store=True,
-                          track_visibility='onchange')
-    debit = fields.Float(string=u'เดบิต', copy=False, track_visibility='onchange')
-    credit = fields.Float(string=u'เครดิต', copy=False, track_visibility='onchange')
+                          tracking=True)
+    debit = fields.Float(string=u'เดบิต', copy=False, tracking=True)
+    credit = fields.Float(string=u'เครดิต', copy=False, tracking=True)
     payment_id = fields.Many2one('ineco.customer.deposit', string=u'รับมัดจำ')
 
     #@api.multi
@@ -730,7 +730,7 @@ class InecoCustomerDepositOtherBaht(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
 
     name = fields.Many2one('account.account', string=u'ผังบัญชี', required=True, copy=False, index=True,
-                           track_visibility='onchange')
-    debit = fields.Float(string=u'เดบิต', copy=False, track_visibility='onchange')
-    credit = fields.Float(string=u'เครดิต', copy=False, track_visibility='onchange')
+                           tracking=True)
+    debit = fields.Float(string=u'เดบิต', copy=False, tracking=True)
+    credit = fields.Float(string=u'เครดิต', copy=False, tracking=True)
     payment_id = fields.Many2one('ineco.customer.deposit', string=u'รับมัดจำ')

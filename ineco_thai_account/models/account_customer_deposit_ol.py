@@ -78,7 +78,7 @@ class InecoCustomerDeposit(models.Model):
     date = fields.Date(string=u'ลงวันที่', required=True, default=fields.Date.context_today,
                        tracking=True)
     type_deposit = fields.Selection([('in', u'รับ'), ('out', 'จ่าย')],
-                             string=u'type_deposit',tracking=True)
+                                    string=u'type_deposit', tracking=True)
     date_due = fields.Date(string=u'วันที่นัดรับเงิน', required=True, tracking=True)
     customer_id = fields.Many2one('res.partner', string=u'ลูกค้า', required=True, tracking=True)
     note = fields.Text(string=u'หมายเหตุ', tracking=True)
@@ -146,14 +146,11 @@ class InecoCustomerDeposit(models.Model):
         report_id = self.company_id.action_report_deposit_id
         return report_id.report_action(self)
 
-
     def unlink(self):
         for deposit in self:
             if not deposit.state == 'draft':
                 raise ValidationError(('ไม่สามารถลบได้เนื่องจากมีการ POST  {} แล้ว'.format(self.move_id.name)))
         return super(InecoCustomerDeposit, self).unlink()
-
-
 
     @api.depends("date")
     def _compute_period(self):
@@ -252,7 +249,8 @@ class InecoCustomerDeposit(models.Model):
 
     def button_post(self):
         self.ensure_one()
-        if round(self.amount_receipt, 2) != self.amount_cheque + self.amount_wht + self.amount_cash + self.amount_discount + self.amount_other:
+        if round(self.amount_receipt,
+                 2) != self.amount_cheque + self.amount_wht + self.amount_cash + self.amount_discount + self.amount_other:
             raise UserError("ยอดไม่สมดุลย์")
 
         if self.name == 'New':
@@ -263,7 +261,7 @@ class InecoCustomerDeposit(models.Model):
         move = self.env['account.move']
         iml = []
         move_line = self.env['account.move.line']
-        company = self.env['res.company'].search([('id','=',self.company_id.id)])
+        company = self.env['res.company'].search([('id', '=', self.company_id.id)])
         vat_sale_account_id = company.vat_sale_account_id.id
         if self.amount_vat:
             move_data_vals = {
@@ -274,7 +272,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': vat_sale_account_id,
             }
-            #print(1,move_data_vals)
+            # print(1,move_data_vals)
             iml.append((0, 0, move_data_vals))
         unearned_income_account_id = company.unearned_income_account_id.id
         if unearned_income_account_id:
@@ -286,7 +284,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': unearned_income_account_id,
             }
-            #print(2, move_data_vals)
+            # print(2, move_data_vals)
             iml.append((0, 0, move_data_vals))
         cash_account_id = company.cash_account_id.id
         if self.amount_cash:
@@ -298,7 +296,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cash_account_id,
             }
-            #print(3, move_data_vals)
+            # print(3, move_data_vals)
             iml.append((0, 0, move_data_vals))
         cheque_sale_account_id = company.cheque_sale_account_id.id
         if self.amount_cheque:
@@ -310,7 +308,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cheque_sale_account_id,
             }
-            #print(4, move_data_vals)
+            # print(4, move_data_vals)
             iml.append((0, 0, move_data_vals))
         cash_discount_account_id = company.cash_discount_account_id.id
         if self.amount_discount:
@@ -322,7 +320,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cash_discount_account_id,
             }
-            #print(5, move_data_vals)
+            # print(5, move_data_vals)
             iml.append((0, 0, move_data_vals))
         wht_sale_account_id = company.wht_sale_account_id.id
         if self.amount_wht:
@@ -334,7 +332,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': wht_sale_account_id,
             }
-            #print(6, move_data_vals)
+            # print(6, move_data_vals)
             iml.append((0, 0, move_data_vals))
         for other in self.other_ids:
             move_data_vals = {
@@ -345,7 +343,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': other.name.id,
             }
-            #print(7, move_data_vals)
+            # print(7, move_data_vals)
             iml.append((0, 0, move_data_vals))
         periods = self.env['ineco.account.period'].finds(dt=self.date)
         if not periods:
@@ -375,7 +373,6 @@ class InecoCustomerDeposit(models.Model):
         self.state = 'post'
         return True
 
-
     def button_post2(self):
         # if self.po_id:
         #     self.po_id.write({'deposit_id': self.id})
@@ -387,7 +384,7 @@ class InecoCustomerDeposit(models.Model):
         move = self.env['account.move']
         iml = []
         move_line = self.env['account.move.line']
-        company = self.env['res.company'].search([('id','=',self.company_id.id)])
+        company = self.env['res.company'].search([('id', '=', self.company_id.id)])
         vat_sale_account_id = company.vat_purchase_tax_break_account_id.id
         if self.amount_vat:
             move_data_vals = {
@@ -397,7 +394,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': vat_sale_account_id,
             }
-            #print(1,move_data_vals)
+            # print(1,move_data_vals)
             iml.append((0, 0, move_data_vals))
 
         unearned_income_account_id = company.unearned_expense_account_id.id
@@ -409,7 +406,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': unearned_income_account_id,
             }
-            #print(2, move_data_vals)
+            # print(2, move_data_vals)
             iml.append((0, 0, move_data_vals))
         cash_account_id = company.cash_account_id.id
         if self.amount_cash:
@@ -420,9 +417,9 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cash_account_id,
             }
-            #print(3, move_data_vals)
+            # print(3, move_data_vals)
             iml.append((0, 0, move_data_vals))
-        cheque_sale_account_id= company.cheque_purchase_account_id.id
+        cheque_sale_account_id = company.cheque_purchase_account_id.id
         if self.amount_cheque:
             move_data_vals = {
                 'partner_id': False,
@@ -431,9 +428,9 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cheque_sale_account_id,
             }
-            #print(4, move_data_vals)
+            # print(4, move_data_vals)
             iml.append((0, 0, move_data_vals))
-        cash_discount_account_id= company.cash_income_account_id.id
+        cash_discount_account_id = company.cash_income_account_id.id
         if self.amount_discount:
             move_data_vals = {
                 'partner_id': False,
@@ -442,18 +439,18 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cash_discount_account_id,
             }
-            #print(5, move_data_vals)
+            # print(5, move_data_vals)
             iml.append((0, 0, move_data_vals))
-        wht_sale_account_id= company.wht_purchase_account_id.id
+        wht_sale_account_id = company.wht_purchase_account_id.id
         if self.amount_wht:
             move_data_vals = {
                 'partner_id': False,
-                'credit':self.amount_wht,
+                'credit': self.amount_wht,
                 'debit': 0.0,
                 'payment_id': False,
                 'account_id': wht_sale_account_id,
             }
-            #print(6, move_data_vals)
+            # print(6, move_data_vals)
             iml.append((0, 0, move_data_vals))
         for other in self.other_ids:
             move_data_vals = {
@@ -487,7 +484,7 @@ class InecoCustomerDeposit(models.Model):
         self.move_id.post()
         ineco_update = self.env['ineco.account.vat'].search([('supplier_deposit_id', '=', self.id)])
         ineco_update.write({'name': self.name})
-        self.write({'name': self.move_id.name,'state':'post'})
+        self.write({'name': self.move_id.name, 'state': 'post'})
 
         return True
 
@@ -556,8 +553,8 @@ class InecoCustomerDepositOther(models.Model):
     name = fields.Many2one('account.account', string=u'ผังบัญชี', required=True, copy=False, index=True,
                            tracking=True)
     amount = fields.Float(string=u'จำนวนเงิน', copy=False, tracking=True)
-    debit = fields.Float(string=u'เดบิต', copy=False, track_visibility='onchange')
-    credit = fields.Float(string=u'เครดิต', copy=False, track_visibility='onchange')
+    debit = fields.Float(string=u'เดบิต', copy=False, tracking=True)
+    credit = fields.Float(string=u'เครดิต', copy=False, tracking=True)
     payment_id = fields.Many2one('ineco.customer.deposit', string=u'รับมัดจำ')
 
 
@@ -579,7 +576,7 @@ class InecoCustomerDepositOtherBaht(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
 
     name = fields.Many2one('account.account', string=u'ผังบัญชี', required=True, copy=False, index=True,
-                           track_visibility='onchange')
-    debit = fields.Float(string=u'เดบิต', copy=False, track_visibility='onchange')
-    credit = fields.Float(string=u'เครดิต', copy=False, track_visibility='onchange')
+                           tracking=True)
+    debit = fields.Float(string=u'เดบิต', copy=False, tracking=True)
+    credit = fields.Float(string=u'เครดิต', copy=False, tracking=True)
     payment_id = fields.Many2one('ineco.customer.deposit', string=u'รับมัดจำ')
