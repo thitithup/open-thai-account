@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Form View to Modify it -->
+    <record id="view_ineco_ir_sequence_form" model="ir.ui.view">
+        <field name="name">ineco.ir.sequence.form</field>
+        <field name="model">ir.sequence</field>
+        <field name="inherit_id" ref="base.sequence_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page/group" position="inside">
+                <group>
+                    <field name="ineco_fiscalyear_id" attrs="{'invisible': [('use_date_range', '=', False)],'required': [('use_date_range', '=', True)]}" />
+                    <button name="button_generate_sequence"
+                            attrs="{'invisible': [('use_date_range', '=', False)]}"
+                            type="object"
+                            string="Generate Sequence" class="oe_highlight"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
