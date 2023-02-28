@@ -2,10 +2,10 @@
 <odoo>
     <data>
 
-<!--        <record id="ineco_account_bank_form" model="ir.ui.view">-->
-<!--            <field name="name">ineco.account.bank.form</field>-->
+<!--        <record id="view_ineco_account_journal_form" model="ir.ui.view">-->
+<!--            <field name="name">ineco.account.journal.form</field>-->
 <!--            <field name="model">account.journal</field>-->
-<!--            <field name="inherit_id" ref="account.view_account_bank_journal_form"/>-->
+<!--            <field name="inherit_id" ref="account.view_account_journal_form"/>-->
 <!--            <field name="arch" type="xml">-->
 <!--                <field name="bank_acc_number" position="attributes">-->
 <!--                    <attribute name="required">True</attribute>-->
@@ -45,6 +45,14 @@
                 <field name="code" position="after">
                     <field name="secure_sequence_id"/>
                 </field>
+
+                <xpath expr="//page[@name='bank_account']/group" position="inside">
+                    <group string="Default Account Value">
+                        <field name="default_debit_account_id" string="Dr Account" />
+                        <field name="default_credit_account_id" string="Cr Account" />
+                    </group>
+                </xpath>
+
             </field>
         </record>
 

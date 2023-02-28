@@ -35,7 +35,7 @@ class InecoCustomerDeposit(models.Model):
             receipt.amount_receipt = round(total_receipt, 2)
             receipt.amount_deposit = round(total_deposit, 2)
 
-    #@api.multi
+    # @api.multi
     @api.depends('wht_ids')
     def _get_wht(self):
         for receipt in self:
@@ -43,7 +43,7 @@ class InecoCustomerDeposit(models.Model):
             for wht in receipt.wht_ids:
                 receipt.amount_wht += wht.tax
 
-    #@api.multi
+    # @api.multi
     @api.depends('cheque_ids')
     def _get_cheque(self):
         for receipt in self:
@@ -51,7 +51,7 @@ class InecoCustomerDeposit(models.Model):
             for cheque in receipt.cheque_ids:
                 receipt.amount_cheque += cheque.amount
 
-    #@api.multi
+    # @api.multi
     @api.depends('vat_ids')
     def _get_vat(self):
         for receipt in self:
@@ -59,7 +59,7 @@ class InecoCustomerDeposit(models.Model):
             for vat in receipt.vat_ids:
                 receipt.amount_vat += (vat.amount_tax / receipt.rate)
 
-    #@api.multi
+    # @api.multi
     @api.depends('other_ids')
     def _get_other(self):
         for receipt in self:
@@ -67,7 +67,7 @@ class InecoCustomerDeposit(models.Model):
             for vat in receipt.other_ids:
                 receipt.amount_other += vat.amount
 
-    #@api.multi
+    # @api.multi
     @api.depends('amount_deposit')
     def _get_payment(self):
         for receipt in self:
@@ -135,8 +135,8 @@ class InecoCustomerDeposit(models.Model):
 
     account_id = fields.Many2one('account.account', string='Credit Account', required=True,
                                  default=lambda self: self.company_id.unearned_income_account_id.id)
-                                 # default=lambda self: int(self.env['ir.config_parameter'].get_param(
-                                 #     'ineco_thai_account.unearned_income_account_id')))
+    # default=lambda self: int(self.env['ir.config_parameter'].get_param(
+    #     'ineco_thai_account.unearned_income_account_id')))
 
     has_residual = fields.Boolean(string='Has Balance', compute='_get_payment', search='_search_residual')
     other_baht_ids = fields.One2many('ineco.customer.deposit.baht', 'payment_id', string='Other Baht')
@@ -150,7 +150,7 @@ class InecoCustomerDeposit(models.Model):
                                     string=u'type_deposit', tracking=True)
 
     # @api.depends('company_id')
-    @api.onchange('company_id','customer_id')
+    @api.onchange('company_id', 'customer_id')
     def _compute_account_id(self):
         for rec in self:
             rec.account_id = rec.company_id.unearned_income_account_id.id
@@ -165,9 +165,7 @@ class InecoCustomerDeposit(models.Model):
                 else:
                     data.period_id = periods
 
-
-
-    #@api.multi
+    # @api.multi
     def _search_residual(self, operator, value):
         all = []
         for data in self.search([]):
@@ -187,7 +185,7 @@ class InecoCustomerDeposit(models.Model):
             self.no_tax_report = False
         self.amount_type_tax = self.tax_id.amount
 
-    #@api.multi
+    # @api.multi
     def write(self, vals):
         res = super(InecoCustomerDeposit, self).write(vals)
         if not self.no_tax_report:
@@ -237,7 +235,7 @@ class InecoCustomerDeposit(models.Model):
                         ineco_update.write({'amount_tax': amount - (amount * 100) / (100 + self.amount_type_tax)})
         return res
 
-    #@api.multi
+    # @api.multi
     def button_tax(self):
         amount = 0.0
         for line in self.line_ids:
@@ -262,7 +260,7 @@ class InecoCustomerDeposit(models.Model):
                 vat_data['amount_tax'] = amount - (amount * 100) / (100 + self.amount_type_tax)
                 ineco_account_vat_obj.create(vat_data)
 
-    #@api.multi
+    # @api.multi
     def button_post(self):
         company_currency_id = self.env.user.company_id.currency_id.id
         if self.currency_id.id != company_currency_id:
@@ -293,11 +291,12 @@ class InecoCustomerDeposit(models.Model):
         move_line = self.env['account.move.line']
         params = self.env['ir.config_parameter'].sudo()
         # vat_sale_account_id = int(params.get_param('ineco_thai_v11.vat_sale_account_id', default=False)) or False,
-        vat_sale_account_id = self.env['account.tax.repartition.line'].search([('invoice_tax_id', '=',self.tax_id.id ),
-                                                                                ('repartition_type','=','tax')], limit=1).account_id.id
+        vat_sale_account_id = self.env['account.tax.repartition.line'].search([('invoice_tax_id', '=', self.tax_id.id),
+                                                                               ('repartition_type', '=', 'tax')],
+                                                                              limit=1).account_id.id
         company = self.env['res.company'].search([('id', '=', self.company_id.id)])
 
-            # self.tax_id.invoice_repartition_line_idsaccount_id.id
+        # self.tax_id.invoice_repartition_line_idsaccount_id.id
         if self.amount_vat:
             move_data_vals = {
                 'partner_id': False,
@@ -500,14 +499,13 @@ class InecoCustomerDeposit(models.Model):
         }
         new_move = move.create(move_vals)
         new_move.sudo().write({'line_ids': iml})
-        new_move.post()
+        new_move.action_post()
         self.move_id = new_move
         ineco_update = self.env['ineco.account.vat'].search([('customer_deposit_id', '=', self.id)])
         if ineco_update:
             ineco_update.write({'name': self.name})
         self.write({'name': self.move_id.name})
         return True
-
 
     def button_post2(self):
         # if self.po_id:
@@ -520,7 +518,7 @@ class InecoCustomerDeposit(models.Model):
         move = self.env['account.move']
         iml = []
         move_line = self.env['account.move.line']
-        company = self.env['res.company'].search([('id','=',self.company_id.id)])
+        company = self.env['res.company'].search([('id', '=', self.company_id.id)])
         vat_sale_account_id = company.vat_purchase_tax_break_account_id.id
         if self.amount_vat:
             move_data_vals = {
@@ -530,7 +528,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': vat_sale_account_id,
             }
-            #print(1,move_data_vals)
+            # print(1,move_data_vals)
             iml.append((0, 0, move_data_vals))
 
         unearned_income_account_id = company.unearned_expense_account_id.id
@@ -542,7 +540,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': unearned_income_account_id,
             }
-            #print(2, move_data_vals)
+            # print(2, move_data_vals)
             iml.append((0, 0, move_data_vals))
         cash_account_id = company.cash_account_id.id
         if self.amount_cash:
@@ -553,9 +551,9 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cash_account_id,
             }
-            #print(3, move_data_vals)
+            # print(3, move_data_vals)
             iml.append((0, 0, move_data_vals))
-        cheque_sale_account_id= company.cheque_purchase_account_id.id
+        cheque_sale_account_id = company.cheque_purchase_account_id.id
         if self.amount_cheque:
             move_data_vals = {
                 'partner_id': False,
@@ -564,9 +562,9 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cheque_sale_account_id,
             }
-            #print(4, move_data_vals)
+            # print(4, move_data_vals)
             iml.append((0, 0, move_data_vals))
-        cash_discount_account_id= company.cash_income_account_id.id
+        cash_discount_account_id = company.cash_income_account_id.id
         if self.amount_discount:
             move_data_vals = {
                 'partner_id': False,
@@ -575,18 +573,18 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cash_discount_account_id,
             }
-            #print(5, move_data_vals)
+            # print(5, move_data_vals)
             iml.append((0, 0, move_data_vals))
-        wht_sale_account_id= company.wht_purchase_account_id.id
+        wht_sale_account_id = company.wht_purchase_account_id.id
         if self.amount_wht:
             move_data_vals = {
                 'partner_id': False,
-                'credit':self.amount_wht,
+                'credit': self.amount_wht,
                 'debit': 0.0,
                 'payment_id': False,
                 'account_id': wht_sale_account_id,
             }
-            #print(6, move_data_vals)
+            # print(6, move_data_vals)
             iml.append((0, 0, move_data_vals))
         for other in self.other_ids:
             move_data_vals = {
@@ -620,10 +618,11 @@ class InecoCustomerDeposit(models.Model):
         self.move_id.post()
         ineco_update = self.env['ineco.account.vat'].search([('supplier_deposit_id', '=', self.id)])
         ineco_update.write({'name': self.name})
-        self.write({'name': self.move_id.name,'state':'post'})
+        self.write({'name': self.move_id.name, 'state': 'post'})
 
         return True
-    #@api.multi
+
+    # @api.multi
     def button_cancel(self):
         self.ensure_one()
         self.move_id.sudo().button_cancel()
@@ -635,18 +634,23 @@ class InecoCustomerDeposit(models.Model):
         self.env.cr.execute(sql)
         return True
 
-    #@api.multi
+    # @api.multi
     def button_draft(self):
         self.ensure_one()
         self.move_id = False
         self.state = 'draft'
         return True
 
-    #@api.multi
+    # @api.multi
     def button_journal(self):
         if self.move_id:
             self.move_id.name = self.journal_name
         return True
+
+    @api.onchange('journal_id')
+    def onchange_journal_id(self):
+        if self.journal_id and self.journal_id.default_credit_account_id:
+            self.account_id = self.journal_id.default_credit_account_id.id
 
 
 # @api.model
@@ -671,7 +675,7 @@ class InecoCustomerDepositLine(models.Model):
     state = fields.Selection([('draft', 'Draft'), ('post', 'Posted'), ('cancel', 'Cancel')],
                              string=u'State', related='payment_id.state', store=True)
 
-    #@api.multi
+    # @api.multi
     def button_trash(self):
         ineco_account = self.env['ineco.account.vat'].search([('customer_deposit_line_id', '=', self.id), ])
         sql_ineco_account_vats = """
@@ -702,7 +706,7 @@ class InecoCustomerDepositOther(models.Model):
     credit = fields.Float(string=u'เครดิต', copy=False, tracking=True)
     payment_id = fields.Many2one('ineco.customer.deposit', string=u'รับมัดจำ')
 
-    #@api.multi
+    # @api.multi
     @api.depends('debit', 'credit')
     def _compute_amount(self):
         for data in self:
@@ -713,6 +717,7 @@ class InecoCustomerDepositOther(models.Model):
             else:
                 data.amount = 0.00
 
+
 class DepositHistoryLine(models.Model):
     _name = 'deposit.history.line'
     _description = 'History Deposit'
@@ -722,6 +727,7 @@ class DepositHistoryLine(models.Model):
     control_id = fields.Many2one('ineco.customer.deposit', string='Deposit')
     amount = fields.Float('Amount', digits=(16, 2), tracking=True)
     date_amount = fields.Datetime('Date Amount', tracking=True)
+
 
 class InecoCustomerDepositOtherBaht(models.Model):
     _name = 'ineco.customer.deposit.baht'

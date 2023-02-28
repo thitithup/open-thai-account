@@ -65,6 +65,7 @@ Thailand Accounting
         "views/stock_picking_type_insert_view.xml",
 
         "views/purchase_order_view.xml",
+        "views/ir_sequence_view.xml",
     ],
     'demo': [],
     'installable': True,

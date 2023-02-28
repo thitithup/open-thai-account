@@ -20,3 +20,4 @@ from . import company
 from . import sale
 from . import stock_picking
 from . import stock_picking_type
+from . import ir_sequence
