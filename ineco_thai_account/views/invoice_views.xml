@@ -70,9 +70,10 @@
 
                 <xpath expr="//notebook[last()]" position="inside">
                     <page string="มัดจำ" attrs="{'invisible': ['|',('move_type','not in', ['out_invoice','in_invoice']),
-                                                         ('state','in',['posted','cancel'])]}">
-                        <field name="customer_deposit_ids"
-                               attrs="{'readonly':[('state', 'not in', ('draft', 'cancel'))]}">
+                                                         ('state','in',['cancel'])]}">
+                        <field name="customer_deposit_ids">
+
+                            <!--attrs="{'readonly':[('state', 'not in', ('draft', 'cancel'))]}"-->
                             <tree editable="bottom" create="0">
                                 <field name="name"
                                        readonly="1"
@@ -81,6 +82,10 @@
                                 <field name="amount_total" readonly="1"/>
                                 <field name="amount_residual" readonly="1"/>
                                 <field name="amount_receipt"/>
+                                <field name="move_line" invisible="1" />
+                                <button name="update_deposit" string="เลือกตัด" class="oe_highlight"
+                                        attrs="{'invisible': [('move_line','!=', False)]}"
+                                        type="object"/>
                             </tree>
                         </field>
                     </page>

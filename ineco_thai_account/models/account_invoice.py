@@ -181,7 +181,7 @@ class AccountMove(models.Model):
                         'name': deposit.id,
                         'amount_total': deposit.amount_deposit,
                         'amount_residual': deposit.amount_residual,
-                        'invoice_id': self.id
+                        'invoice_id': self.id,
                     })
 
     def delete_deposit(self):
@@ -366,4 +366,5 @@ class AccountMoveLine(models.Model):
 
     customer_deposit_ids = fields.Many2one('ineco.customer.deposit', string=u'มัดจำ')
     pay_id_thai = fields.Many2one('account.move.line', string=u'ใบแจ้งหนี้/ใบกำกับภาษี', copy=False)
+    invoice_id = fields.Many2one('account.move', string=u'ใบแจ้งหนี้/ใบกำกับภาษี', copy=False)
     # supplier_deposit_ids = fields.Many2one('ineco.supplier.payment.deposit', 'invoice_id', string=u'จ่ายมัดจำ')

@@ -790,8 +790,7 @@ class InecoCustomerPaymentDeposit(models.Model):
     amount_total = fields.Float(string=u'ยอดตามบิล', copy=False, tracking=True)
     amount_residual = fields.Float(string=u'ยอดคงเหลือ', copy=False, tracking=True)
     pay_amount_receipt = fields.Float(string=u'ยอดชำระ', copy=False, tracking=True)
-    amount_receipt = fields.Float(string=u'จำนวนชำระ', copy=False, tracking=True,
-                                  related='move_line.price_unit')
+    amount_receipt = fields.Float(string=u'จำนวนชำระ', copy=False, tracking=True, related='move_line.price_unit')
     payment_id = fields.Many2one('ineco.customer.payment', string=u'รับชำระ')
     supplier_payment_id = fields.Many2one('ineco.supplier.payment', string=u'จ่ายชำระ')
     invoice_id = fields.Many2one('account.move', string=u'ใบแจ้งหนี้/ใบกำกับภาษี')
@@ -814,7 +813,7 @@ class InecoCustomerPaymentDeposit(models.Model):
         for cut in self:
             data = {
                 'move_id': self.invoice_id.id,
-                'exclude_from_invoice_tab': False,
+                # 'exclude_from_invoice_tab': False,
                 'name': "หักมัดจำ {}".format(cut.name.name),
                 'quantity': quantity,
                 'account_id': account_id,

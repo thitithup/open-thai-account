@@ -3,12 +3,13 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
+from datetime import datetime
 
 
 class InecoCustomerDeposit(models.Model):
     _name = 'ineco.customer.deposit'
     _description = 'Customer Deposit'
-    _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = "id desc"
 
     @api.depends('line_ids')
@@ -57,7 +58,7 @@ class InecoCustomerDeposit(models.Model):
         for receipt in self:
             receipt.amount_vat = 0.0
             for vat in receipt.vat_ids:
-                receipt.amount_vat += (vat.amount_tax / receipt.rate)
+                receipt.amount_vat += vat.amount_tax
 
     # @api.multi
     @api.depends('other_ids')
@@ -112,7 +113,7 @@ class InecoCustomerDeposit(models.Model):
     vat_ids = fields.One2many('ineco.account.vat', 'customer_deposit_id', string=u'ภาษีขาย')
     wht_ids = fields.One2many('ineco.wht', 'customer_deposit_id', string=u'ภาษีหัก ณ ที่จ่าย')
     move_id = fields.Many2one('account.move', string=u'สมุดรายวัน', index=True)
-    amount_residual = fields.Float(string=u'ยอดคงเหลือ', compute='_get_payment')  # store=True
+    # amount_residual = fields.Float(string=u'ยอดคงเหลือ', compute='_get_payment')  # store=True
     payment_ids = fields.One2many('ineco.customer.payment.deposit', 'name', string=u'ตัดมัดจำ')
     sale_order_id = fields.Many2one('sale.order', string='Sale Orders')
     tax_type = fields.Selection(default='percent', string="ประเภทภาษี", required=True,
@@ -124,7 +125,8 @@ class InecoCustomerDeposit(models.Model):
 
     company_id = fields.Many2one('res.company', string='Company', store=True, readonly=True, change_default=True,
                                  default=lambda self: self.env.company)
-    amount_residual = fields.Float(string=u'ยอดคงเหลือ', compute='_get_payment', store=True)  # store=True
+    amount_residual = fields.Float(string=u'ยอดคงเหลือ', compute='_get_payment', search='_search_residual',
+                                   store=False)  # store=True
 
     # 2022-10-10
     currency_id = fields.Many2one('res.currency', string='Currency', required=True,
@@ -291,6 +293,166 @@ class InecoCustomerDeposit(models.Model):
         move_line = self.env['account.move.line']
         params = self.env['ir.config_parameter'].sudo()
         # vat_sale_account_id = int(params.get_param('ineco_thai_v11.vat_sale_account_id', default=False)) or False,
+        vat_sale_account_id = self.tax_id.account_id.id
+        if self.amount_vat:
+            move_data_vals = {
+                'partner_id': False,
+                'invoice_id': False,
+                'debit': 0.0,
+                'credit': round(self.amount_vat, 2) * self.rate,
+                'payment_id': False,
+                'account_id': vat_sale_account_id,
+                'currency_id': self.currency_id.id,
+                'amount_currency': -round(self.amount_vat, 2),
+                'amount_residual_currency': -round(self.amount_vat, 2) * self.rate,
+            }
+            iml.append((0, 0, move_data_vals))
+        # unearned_income_account_id = int(
+        #     params.get_param('ineco_thai_v11.unearned_income_account_id', default=False)) or False,
+        unearned_income_account_id = self.account_id.id
+        if unearned_income_account_id:
+            move_data_vals = {
+                'partner_id': self.customer_id.id,
+                'invoice_id': False,
+                'debit': 0.0,
+                'credit': round((round(self.amount_receipt, 2) - round(self.amount_vat, 2)) * self.rate, 2),
+                'payment_id': False,
+                'account_id': unearned_income_account_id,
+                'currency_id': self.currency_id.id,
+                'amount_currency': -(round(self.amount_receipt, 2) - round(self.amount_vat, 2)),
+                'amount_residual_currency': -(round(self.amount_receipt, 2) - round(self.amount_vat, 2)) * self.rate,
+            }
+            iml.append((0, 0, move_data_vals))
+        cash_account_id = int(params.get_param('ineco_thai_v11.cash_account_id', default=False)) or False,
+        if self.amount_cash:
+            move_data_vals = {
+                'partner_id': False,
+                'invoice_id': False,
+                'credit': 0.0,
+                'debit': round(self.amount_cash, 2) * self.rate,
+                'payment_id': False,
+                'account_id': cash_account_id,
+                'currency_id': self.currency_id.id,
+                'amount_currency': round(self.amount_cash, 2),
+                'amount_residual_currency': round(self.amount_cash, 2) * self.rate,
+            }
+            iml.append((0, 0, move_data_vals))
+        cheque_sale_account_id = int(params.get_param('ineco_thai_v11.cheque_sale_account_id', default=False)) or False,
+        if self.amount_cheque:
+            move_data_vals = {
+                'partner_id': False,
+                'invoice_id': False,
+                'credit': 0.0,
+                'debit': round(self.amount_cheque, 2) * self.rate,
+                'payment_id': False,
+                'account_id': cheque_sale_account_id,
+                'currency_id': self.currency_id.id,
+                'amount_currency': round(self.amount_cheque, 2),
+                'amount_residual_currency': round(self.amount_cheque, 2) * self.rate,
+            }
+            iml.append((0, 0, move_data_vals))
+        cash_discount_account_id = int(
+            params.get_param('ineco_thai_v11.cash_discount_account_id', default=False)) or False,
+        if self.amount_discount:
+            move_data_vals = {
+                'partner_id': False,
+                'invoice_id': False,
+                'credit': 0.0,
+                'debit': round(self.amount_discount, 2) * self.rate,
+                'payment_id': False,
+                'account_id': cash_discount_account_id,
+                'currency_id': self.currency_id.id,
+                'amount_currency': round(self.amount_discount, 2),
+                'amount_residual_currency': round(self.amount_discount, 2) * self.rate,
+            }
+            iml.append((0, 0, move_data_vals))
+        wht_sale_account_id = int(params.get_param('ineco_thai_v11.wht_sale_account_id', default=False)) or False,
+        if self.amount_wht:
+            move_data_vals = {
+                'partner_id': False,
+                'invoice_id': False,
+                'credit': 0.0,
+                'debit': round(self.amount_wht, 2) * self.rate,
+                'payment_id': False,
+                'account_id': wht_sale_account_id,
+                'currency_id': self.currency_id.id,
+                'amount_currency': round(self.amount_wht, 2),
+                'amount_residual_currency': round(self.amount_wht, 2) * self.rate,
+            }
+            iml.append((0, 0, move_data_vals))
+        for other in self.other_ids:
+            move_data_vals = {
+                'partner_id': False,
+                'invoice_id': False,
+                'debit': other.amount > 0 and abs(round(other.amount, 2)) * self.rate or 0.0,
+                'credit': other.amount < 0 and abs(round(other.amount, 2)) * self.rate or 0.0,
+                'payment_id': False,
+                'account_id': other.name.id,
+                'currency_id': self.currency_id.id,
+                'amount_currency': other.amount < 0 and -abs(round(other.amount, 2)) or abs(round(other.amount, 2)),
+                'amount_residual_currency': other.amount < 0 and -abs(round(other.amount, 2)) * self.rate or abs(
+                    round(other.amount, 2)) * self.rate,
+            }
+            iml.append((0, 0, move_data_vals))
+        for other in self.other_baht_ids:
+            move_data_vals = {
+                'partner_id': False,
+                'invoice_id': False,
+                'debit': other.debit,
+                'credit': other.credit,
+                'payment_id': False,
+                'account_id': other.name.id,
+            }
+            iml.append((0, 0, move_data_vals))
+        self.state = 'post'
+        move_vals = {
+            'ref': self.name,
+            'date': self.date,
+            'company_id': self.env.user.company_id.id,
+            'journal_id': self.journal_id.id,
+            'partner_id': self.customer_id.id,
+            'rate': self.rate
+        }
+        new_move = move.create(move_vals)
+        new_move.sudo().write({'line_ids': iml})
+        new_move.action_post()
+        self.move_id = new_move
+        ineco_update = self.env['ineco.account.vat'].search([('customer_deposit_id', '=', self.id)])
+        if ineco_update:
+            ineco_update.write({'name': self.name})
+        self.write({'name': self.move_id.name})
+        return True
+
+    def button_post3(self):
+        company_currency_id = self.env.user.company_id.currency_id.id
+        if self.currency_id.id != company_currency_id:
+            if self.rate == 1.00:
+                raise UserError('เรทไม่ควรเป็น 1.00')
+            if self.rate <= 0.00:
+                raise UserError('เรทไม่ควรต่ำกว่า 0.00')
+        elif self.currency_id.id == company_currency_id:
+            if self.rate != 1.00:
+                raise UserError('เรทต้องเป็น 1.00')
+        self.ensure_one()
+        if round(self.amount_receipt, 2) != round(
+                self.amount_cheque + self.amount_wht + self.amount_cash + self.amount_discount + self.amount_other, 2):
+            raise UserError("ยอดไม่สมดุลย์")
+        if self.name == 'New':
+            self.name = self.env['ir.sequence'].next_by_code('ineco.customer.deposit')
+
+        # ตรวจสอบอื่นๆ สกุลบาท
+        baht_debit = 0.00
+        baht_credit = 0.00
+        for other_baht in self.other_baht_ids:
+            baht_credit += round(other_baht.credit, 2)
+            baht_debit += round(other_baht.debit, 2)
+        if baht_debit != baht_credit:
+            raise UserError('ช่องอื่นๆ สกุลเงินบาท ไม่สมดุลย์')
+        move = self.env['account.move']
+        iml = []
+        move_line = self.env['account.move.line']
+        params = self.env['ir.config_parameter'].sudo()
+        # vat_sale_account_id = int(params.get_param('ineco_thai_v11.vat_sale_account_id', default=False)) or False,
         vat_sale_account_id = self.env['account.tax.repartition.line'].search([('invoice_tax_id', '=', self.tax_id.id),
                                                                                ('repartition_type', '=', 'tax')],
                                                                               limit=1).account_id.id
@@ -309,7 +471,7 @@ class InecoCustomerDeposit(models.Model):
                 'amount_currency': -round(self.amount_vat, 2),
                 'amount_residual_currency': -round(self.amount_vat, 2) * self.rate,
             }
-            print('1', move_data_vals)
+            # print('1', move_data_vals)
             iml.append((0, 0, move_data_vals))
         # unearned_income_account_id = int(
         #     params.get_param('ineco_thai_v11.unearned_income_account_id', default=False)) or False,
@@ -424,7 +586,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': unearned_income_account_id,
             }
-            print(2, move_data_vals)
+            # print(2, move_data_vals)
             iml.append((0, 0, move_data_vals))
         cash_account_id = company.cash_account_id.id
         if self.amount_cash:
@@ -436,7 +598,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cash_account_id,
             }
-            print(3, move_data_vals)
+            # print(3, move_data_vals)
             iml.append((0, 0, move_data_vals))
         cheque_sale_account_id = company.cheque_sale_account_id.id
         if self.amount_cheque:
@@ -448,7 +610,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cheque_sale_account_id,
             }
-            print(4, move_data_vals)
+            # print(4, move_data_vals)
             iml.append((0, 0, move_data_vals))
         cash_discount_account_id = company.cash_discount_account_id.id
         if self.amount_discount:
@@ -460,7 +622,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': cash_discount_account_id,
             }
-            print(5, move_data_vals)
+            # print(5, move_data_vals)
             iml.append((0, 0, move_data_vals))
         wht_sale_account_id = company.wht_sale_account_id.id
         if self.amount_wht:
@@ -472,7 +634,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': wht_sale_account_id,
             }
-            print(6, move_data_vals)
+            # print(6, move_data_vals)
             iml.append((0, 0, move_data_vals))
         for other in self.other_ids:
             move_data_vals = {
@@ -483,7 +645,7 @@ class InecoCustomerDeposit(models.Model):
                 'payment_id': False,
                 'account_id': other.name.id,
             }
-            print(7, move_data_vals)
+            # print(7, move_data_vals)
             iml.append((0, 0, move_data_vals))
         periods = self.env['ineco.account.period'].finds(dt=self.date)
         if not periods:
@@ -651,6 +813,14 @@ class InecoCustomerDeposit(models.Model):
     def onchange_journal_id(self):
         if self.journal_id and self.journal_id.default_credit_account_id:
             self.account_id = self.journal_id.default_credit_account_id.id
+
+    def create_history(self, amount, name):
+        self.env['deposit.history.line'].create({
+            'date_amount': datetime.now(),
+            'name': name,
+            'control_id': self.id,
+            'amount': amount,
+        })
 
 
 # @api.model
