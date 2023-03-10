@@ -15,13 +15,27 @@ class SaleOrderLine(models.Model):
     assigned_id = fields.Many2one('res.users', string='Assign To')
     assigned_ids = fields.Many2many('res.users', 'sale_order_line_users_rel', 'sale_line_id', 'user_id',
                                     string='Assign To')
+    sale_margin_profit = fields.Float(string='Sale Margin (%)', related='company_id.sale_margin_profit', default=10,
+                                      digits=(12, 2))
+    costing_price = fields.Monetary(string='Costing Price', copy=False)
+    company_price = fields.Monetary(string='Company Price', copy=False)
 
     @api.onchange('line_item_ids', 'line_day_ids', 'line_project_ids', 'manday')
     def _change_price_unit(self):
         for line in self:
-            line.price_unit = sum(line.line_item_ids.mapped('price_subtotal')) + (sum(
+            line.costing_price = sum(line.line_item_ids.mapped('price_subtotal')) + (sum(
                 line.line_day_ids.mapped('price_unit')) * line.manday or 1.0) + sum(
                 line.line_project_ids.mapped('price_unit'))
+            line.company_price = line.costing_price * (1 + (line.sale_margin_profit / 100))
+            if not line.price_unit:
+                line.price_unit = line.company_price
+
+    @api.onchange('price_unit')
+    def _change_price_unit(self):
+        for line in self:
+            if line.price_unit < self.company_price:
+                raise ValidationError(
+                    'ราคาขาย {:,.2f} ต้องมากกว่าราคานโยบายของบริษัท {:,.2f}'.format(line.price_unit, line.company_price))
 
     def _timesheet_create_task_prepare_values(self, project):
         self.ensure_one()

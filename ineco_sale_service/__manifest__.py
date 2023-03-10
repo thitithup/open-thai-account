@@ -19,6 +19,7 @@
         'views/project_project_view.xml',
         'views/analytic_view.xml',
         'security/security.xml',
+        'views/res_company_view.xml',
     ],
     'demo': [
     ],
