@@ -6,3 +6,5 @@ from . import stock_picking_type
 from . import stock_picking
 from . import project_project
 from . import res_company
+from . import hr_expense
+from . import hr_timesheet
