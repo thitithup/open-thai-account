@@ -21,7 +21,7 @@ class SaleOrderLine(models.Model):
     company_price = fields.Monetary(string='Company Price', copy=False)
 
     @api.onchange('line_item_ids', 'line_day_ids', 'line_project_ids', 'manday')
-    def _change_price_unit(self):
+    def _change_price_unit2(self):
         for line in self:
             line.costing_price = sum(line.line_item_ids.mapped('price_subtotal')) + (sum(
                 line.line_day_ids.mapped('price_unit')) * line.manday or 1.0) + sum(
