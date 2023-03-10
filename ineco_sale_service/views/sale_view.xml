@@ -23,6 +23,14 @@
                             <field name="assigned_ids" widget="many2many_avatar_user" class="oe_inline" required="1"/>
                         </div>
                     </group>
+                    <group string="Pricing">
+                        <label for="sale_margin_profit">Margin</label>
+                        <div name="sale_margin_profit">
+                            <field name="sale_margin_profit" />
+                        </div>
+                        <field name="costing_price" />
+                        <field name="company_price" />
+                    </group>
                 </xpath>
                 <xpath expr="//notebook/page[@name='order_lines']/field[@name='order_line']/form/div[@name='invoice_lines']"
                        position="before">
