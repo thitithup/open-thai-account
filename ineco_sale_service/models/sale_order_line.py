@@ -35,7 +35,8 @@ class SaleOrderLine(models.Model):
         for line in self:
             if line.price_unit < self.company_price:
                 raise ValidationError(
-                    'ราคาขาย {:,.2f} ต้องมากกว่าราคานโยบายของบริษัท {:,.2f}'.format(line.price_unit, line.company_price))
+                    'ราคาขาย {:,.2f} ต้องมากกว่าราคานโยบายของบริษัท {:,.2f}'.format(line.price_unit,
+                                                                                    line.company_price))
 
     def _timesheet_create_task_prepare_values(self, project):
         self.ensure_one()
