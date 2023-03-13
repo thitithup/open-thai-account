@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form string="Billing" version="7.0">
                     <header>
-                        <button name="button_post2" string="Post" type="object" states="draft"/>
+                        <button name="button_post" string="Post" type="object" states="draft"/>
                         <button name="button_draft" string="To draft" type="object" states="cancel"/>
                         <button name="button_cancel" string="Cancel" type="object" states="post,draft"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,post,cancel"/>
