@@ -13,13 +13,19 @@
     'depends': ['sale', 'sale_project', 'sale_timesheet', 'purchase', 'stock', 'project', 'hr_expense', 'analytic',
                 'sale_management'],
     'data': [
+        'security/ir.model.access.csv',
         'views/sale_view.xml',
         'views/stock_picking_type_view.xml',
         'views/stock_picking_view.xml',
+
+        'wizard_select_timesheet/wizard_select_timesheet.xml',
+
         'views/project_project_view.xml',
         'views/analytic_view.xml',
         'security/security.xml',
         'views/res_company_view.xml',
+
+        'views/hr_expense_sheet_views.xml',
     ],
     'demo': [
     ],

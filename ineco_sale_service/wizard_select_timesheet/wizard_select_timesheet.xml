@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+        <record id="wizard_select_timesheet_form" model="ir.ui.view">
+            <field name="name">wizard.select.timesheet.form</field>
+            <field name="model">wizard.select.timesheet</field>
+            <field name="arch" type="xml">
+                <form string="po to so" version="7.0">
+                    <sheet>
+
+                        <notebook>
+                            <page string="รายการ">
+                                <field name="item_ids" nolabel="1" colspan="2">
+                                    <tree string="Details" create="false" editable="bottom">
+                                        <field name="order_id"
+                                               options="{'no_open': true}"
+                                               invisible="1"/>
+                                        <field name="timesheet_id" invisible="1"/>
+                                        <field name="date"/>
+                                        <field name="name" readonly="0"/>
+                                        <field name="user_id" readonly="0"/>
+                                        <field name="product_id" readonly="0" required="1"/>
+                                        <field name="unit_amount" readonly="0"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <footer>
+                            <button string="OK" name="select_set_timesheet" type="object" class="oe_highlight"/>
+                            or
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                            <!--                       -->
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_select_timesheet" model="ir.actions.act_window">
+            <field name="name">ตั้งเบิกค่าใช้จ่าย</field>
+            <field name="res_model">wizard.select.timesheet</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+    </data>
+</openerp>

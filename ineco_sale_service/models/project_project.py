@@ -31,3 +31,11 @@ class ProjectProject(models.Model):
             for line in order_line_item:
                 qty += line.qty
             project.allocated_hours = qty
+
+class ProjectTask(models.Model):
+    _inherit = "project.task"
+
+    def create_expense_sheet(self):
+        print("create_expense_sheet")
+        expense_sheet = self.env['hr.expense.sheet']
+
